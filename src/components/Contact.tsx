@@ -1,0 +1,158 @@
+import { useState } from "react";
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
+import { Mail, ArrowRight, Check, Copy, MessageSquare } from "lucide-react";
+import { GitHubIcon, LinkedInIcon, CodolioIcon, OSCIIcon } from "./icons";
+import { config } from "../data/portfolio";
+
+export function Contact() {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(config.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <section
+      id="contact"
+      ref={ref}
+      className="py-32 bg-slate-900 text-white relative overflow-hidden"
+      aria-labelledby="contact-heading"
+    >
+      {/* Background ambient lighting */}
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-blue-600/10 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-purple-600/10 blur-3xl pointer-events-none rounded-full" />
+
+      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+        <div className="max-w-3xl">
+          {/* Label */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="mb-4"
+          >
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-400 bg-blue-950/70 border border-blue-800 uppercase">
+              <MessageSquare className="w-3.5 h-3.5" />
+              Get in Touch
+            </span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h2
+            id="contact-heading"
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-[1.1]"
+          >
+            Have an interesting opportunity?{" "}
+            <span className="text-slate-400 font-normal">
+              Let's connect.
+            </span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.2 }}
+            className="text-slate-300 text-base sm:text-lg leading-relaxed mb-10 max-w-2xl"
+          >
+            I am always glad to connect with fellow software engineers, open-source maintainers, and teams building meaningful products. Whether discussing backend engineering, algorithms, or future engineering roles — feel free to reach out.
+          </motion.p>
+
+          {/* Primary Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.3 }}
+            className="flex flex-wrap items-center gap-3.5 mb-14"
+          >
+            <a
+              href={`mailto:${config.email}`}
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/25 transition-all cursor-pointer group"
+            >
+              <Mail className="w-4 h-4" />
+              <span>{config.email}</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+
+            <button
+              onClick={copyEmail}
+              className="inline-flex items-center gap-2 px-4 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-mono border border-slate-700 transition-colors cursor-pointer"
+              aria-label="Copy Email to Clipboard"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-emerald-400" />
+                  <span className="text-emerald-400">Copied to Clipboard!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  <span>Copy Address</span>
+                </>
+              )}
+            </button>
+          </motion.div>
+
+          {/* Verified Social Profile Cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.4 }}
+            className="grid sm:grid-cols-2 md:grid-cols-4 gap-3 pt-8 border-t border-slate-800"
+          >
+            <a
+              href={config.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all group"
+            >
+              <GitHubIcon className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors mb-2" />
+              <p className="text-sm font-semibold text-white">GitHub</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">@sivaharish31</p>
+            </a>
+
+            <a
+              href={config.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all group"
+            >
+              <LinkedInIcon className="w-5 h-5 text-slate-400 group-hover:text-blue-400 transition-colors mb-2" />
+              <p className="text-sm font-semibold text-white">LinkedIn</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">in/ssivaharish</p>
+            </a>
+
+            <a
+              href={config.codolio}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all group"
+            >
+              <CodolioIcon className="w-5 h-5 text-slate-400 group-hover:text-purple-400 transition-colors mb-2" />
+              <p className="text-sm font-semibold text-white">Codolio</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">Coding Profile</p>
+            </a>
+
+            <a
+              href={config.osci}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-slate-600 transition-all group"
+            >
+              <OSCIIcon className="w-5 h-5 text-slate-400 group-hover:text-emerald-400 transition-colors mb-2" />
+              <p className="text-sm font-semibold text-white">OSCI</p>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">Open Source India</p>
+            </a>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
