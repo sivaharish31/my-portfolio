@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { ArrowDown, Mail, Download, ChevronRight, Terminal, Sparkles, CheckCircle2, ShieldCheck, Flame } from "lucide-react";
+import { ArrowDown, Mail, Download, ChevronRight, Terminal, ShieldCheck, Flame } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, CodolioIcon } from "./icons";
 import { config } from "../data/portfolio";
 
