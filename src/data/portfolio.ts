@@ -1,12 +1,12 @@
 // ============================================================
-// PORTFOLIO CONFIGURATION — Siva Harish
+// PORTFOLIO CONFIGURATION — Sivaharish
 // Centralized configuration file for personal details,
 // skills, projects, open-source contributions, and links.
 // ============================================================
 
 export const config = {
   // ── Personal Information ──────────────────────────────────
-  name: "Siva Harish",
+  name: "Sivaharish",
   initials: "SH",
   title: "Software Engineer",
   location: "Chennai, India",
@@ -32,14 +32,11 @@ export const config = {
   codolio: "https://codolio.com/profile/Sivaharish",
   osci: "https://osci.osconnect.org/dashboard",
 
-  // ── Resume ───────────────────────────────────────────────
-  resumeUrl: "/resume.pdf",
-
   // ── SEO / Meta ───────────────────────────────────────────
   siteUrl: "https://sivaharish.dev",
-  pageTitle: "Siva Harish | Software Engineer",
+  pageTitle: "Sivaharish | Software Engineer",
   metaDescription:
-    "Explore the portfolio of Siva Harish, a Computer Science engineering student, Java programmer, and open-source contributor interested in software engineering and backend development.",
+    "Explore the portfolio of Sivaharish, a Computer Science engineering student, Java programmer, and open-source contributor interested in software engineering and backend development.",
 
   // ── About Section ─────────────────────────────────────────
   about: {

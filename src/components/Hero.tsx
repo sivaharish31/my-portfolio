@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { ArrowDown, Mail, Download, ChevronRight, Terminal, ShieldCheck, Flame } from "lucide-react";
+import { ArrowDown, Mail, ChevronRight, Terminal, ShieldCheck, Flame } from "lucide-react";
 import { GitHubIcon, LinkedInIcon, CodolioIcon } from "./icons";
 import { config } from "../data/portfolio";
 
@@ -85,7 +85,7 @@ export function Hero() {
               transition={{ duration: 0.65, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="text-base sm:text-lg text-slate-700 leading-relaxed mb-3"
             >
-              Hi, I'm <strong className="text-slate-950 font-bold">Siva Harish</strong> — a Computer Science & Engineering student at{" "}
+              Hi, I'm <strong className="text-slate-950 font-bold">Sivaharish</strong> — a Computer Science & Engineering student at{" "}
               <span className="text-slate-900 font-semibold">St. Joseph's College of Engineering</span>, Chennai (Class of 2029).
             </motion.p>
 
@@ -99,12 +99,12 @@ export function Hero() {
               Aspiring Software Development Engineer focused on Java programming, data structures & algorithms, and practical backend architecture with verified code contributions to established open-source projects.
             </motion.p>
 
-            {/* Action Buttons */}
+            {/* Action Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center gap-3.5 mb-8"
+              className="flex items-center gap-3.5 mb-7"
             >
               <motion.button
                 onClick={() => scrollTo("projects")}
@@ -115,17 +115,6 @@ export function Hero() {
                 <span>Explore My Work</span>
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </motion.button>
-
-              <motion.a
-                href={config.resumeUrl}
-                download
-                className="inline-flex items-center gap-2 px-5 py-3 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-sm font-semibold rounded-xl border border-slate-200 shadow-2xs transition-all cursor-pointer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Download className="w-4 h-4 text-slate-500" />
-                <span>Download Resume</span>
-              </motion.a>
             </motion.div>
 
             {/* Social Profile Badges */}
