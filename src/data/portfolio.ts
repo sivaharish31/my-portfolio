@@ -33,7 +33,7 @@ export const config = {
   osci: "https://osci.osconnect.org/dashboard",
 
   // ── SEO / Meta ───────────────────────────────────────────
-  siteUrl: "https://sivaharish.dev",
+  siteUrl: "https://sivaharish-dev.vercel.app",
   pageTitle: "Sivaharish | Software Engineer",
   metaDescription:
     "Explore the portfolio of Sivaharish, a Computer Science engineering student, Java programmer, and open-source contributor interested in software engineering and backend development.",
