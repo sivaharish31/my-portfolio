@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ── Custom Design Tokens ─────────────────────────────────── */
 :root {
   --bg-primary: #FFFFFF;
@@ -16,6 +18,19 @@
   --border: #E2E8F0;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+.dark, [data-theme="dark"] {
+  --bg-primary: #090D16;
+  --bg-secondary: #0F172A;
+  --bg-tertiary: #1E293B;
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --accent: #3B82F6;
+  --accent-purple: #A855F7;
+  --accent-cyan: #22D3EE;
+  --border: #1E293B;
 }
 
 /* ── Base Reset & Typography ──────────────────────────────── */
@@ -36,12 +51,14 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
-  selection-background-color: rgba(37, 99, 235, 0.15);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
   min-height: 100vh;
   position: relative;
+  background-color: var(--bg-primary);
+  transition: background-color 0.25s ease;
 }
 
 /* ── Focus Styles ─────────────────────────────────────────── */
@@ -62,6 +79,11 @@ body {
   color: #0F172A;
 }
 
+.dark ::selection {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #FFFFFF;
+}
+
 /* ── Glassmorphism & Surface Utilities ────────────────────── */
 .glass-panel {
   background: rgba(255, 255, 255, 0.72);
@@ -69,6 +91,15 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(226, 232, 240, 0.8);
   box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
 }
 
 .glass-card {
@@ -80,9 +111,23 @@ body {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(30, 41, 59, 0.8);
+  box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5), 0 1px 0 0 rgba(255, 255, 255, 0.05) inset;
+}
+
 .glass-card:hover {
   border-color: rgba(37, 99, 235, 0.3);
   box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.09), 0 1px 0 0 rgba(255, 255, 255, 1) inset;
+  transform: translateY(-2px);
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 16px 36px -8px rgba(37, 99, 235, 0.2), 0 1px 0 0 rgba(255, 255, 255, 0.08) inset;
   transform: translateY(-2px);
 }
 
@@ -92,6 +137,10 @@ body {
   background-size: 24px 24px;
 }
 
+.dark .bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+}
+
 .bg-subtle-grid {
   background-size: 40px 40px;
   background-image: 
@@ -99,17 +148,35 @@ body {
     linear-gradient(to bottom, rgba(226, 232, 240, 0.4) 1px, transparent 1px);
 }
 
+.dark .bg-subtle-grid {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
 /* ── Gradient Glow Accents ────────────────────────────────── */
 .ambient-glow-blue {
   background: radial-gradient(circle, rgba(37, 99, 235, 0.07) 0%, transparent 70%);
+}
+
+.dark .ambient-glow-blue {
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
 }
 
 .ambient-glow-purple {
   background: radial-gradient(circle, rgba(124, 58, 237, 0.06) 0%, transparent 70%);
 }
 
+.dark .ambient-glow-purple {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.09) 0%, transparent 70%);
+}
+
 .ambient-glow-cyan {
   background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+}
+
+.dark .ambient-glow-cyan {
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.08) 0%, transparent 70%);
 }
 
 /* ── Custom Animations ────────────────────────────────────── */

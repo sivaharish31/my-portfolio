@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-white pt-24 pb-12 md:py-20"
+      className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-white dark:from-slate-950 dark:via-slate-900/60 dark:to-slate-950 pt-24 pb-12 md:py-20"
       aria-label="Introduction"
     >
       {/* Background Atmosphere & Radial Glows */}
@@ -53,12 +53,12 @@ export function Hero() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mb-5"
             >
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 border border-blue-200/70 shadow-2xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-950/60 border border-blue-200/70 dark:border-blue-800/70 shadow-2xs">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-400" />
                 </span>
-                <span className="text-xs font-semibold tracking-wide text-blue-900 uppercase">
+                <span className="text-xs font-semibold tracking-wide text-blue-900 dark:text-blue-300 uppercase">
                   Engineering Student · Open-Source Contributor
                 </span>
               </div>
@@ -69,10 +69,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold text-slate-900 leading-[1.08] tracking-tight mb-5"
+              className="text-4xl sm:text-5xl lg:text-[3.75rem] font-extrabold text-slate-900 dark:text-white leading-[1.08] tracking-tight mb-5"
             >
               Building software{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400">
                 that solves
               </span>{" "}
               real problems.
@@ -83,10 +83,10 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="text-base sm:text-lg text-slate-700 leading-relaxed mb-3"
+              className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed mb-3"
             >
-              Hi, I'm <strong className="text-slate-950 font-bold">Sivaharish</strong> — a Computer Science & Engineering student at{" "}
-              <span className="text-slate-900 font-semibold">St. Joseph's College of Engineering</span>, Chennai (Class of 2029).
+              Hi, I'm <strong className="text-slate-950 dark:text-white font-bold">Sivaharish</strong> — a Computer Science & Engineering student at{" "}
+              <span className="text-slate-900 dark:text-slate-200 font-semibold">St. Joseph's College of Engineering</span>, Chennai (Class of 2029).
             </motion.p>
 
             {/* Supporting Context */}
@@ -94,7 +94,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="text-sm sm:text-base text-slate-500 leading-relaxed mb-7 max-w-xl"
+              className="text-sm sm:text-base text-slate-500 dark:text-slate-400 leading-relaxed mb-7 max-w-xl"
             >
               Aspiring Software Development Engineer focused on Java programming, data structures & algorithms, and practical backend architecture with verified code contributions to established open-source projects.
             </motion.p>
@@ -108,7 +108,7 @@ export function Hero() {
             >
               <motion.button
                 onClick={() => scrollTo("projects")}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer group"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 text-sm font-semibold rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -122,13 +122,13 @@ export function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="flex flex-wrap items-center gap-2.5 pt-5 border-t border-slate-200/80"
+              className="flex flex-wrap items-center gap-2.5 pt-5 border-t border-slate-200/80 dark:border-slate-800"
             >
               <a
                 href={config.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-950 dark:hover:text-white border border-transparent dark:border-slate-800 transition-colors"
                 aria-label="GitHub Profile"
               >
                 <GitHubIcon className="w-3.5 h-3.5" />
@@ -139,7 +139,7 @@ export function Hero() {
                 href={config.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-950 dark:hover:text-white border border-transparent dark:border-slate-800 transition-colors"
                 aria-label="LinkedIn Profile"
               >
                 <LinkedInIcon className="w-3.5 h-3.5" />
@@ -150,7 +150,7 @@ export function Hero() {
                 href={config.codolio}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-950 dark:hover:text-white border border-transparent dark:border-slate-800 transition-colors"
                 aria-label="Codolio Profile"
               >
                 <CodolioIcon className="w-3.5 h-3.5" />
@@ -159,7 +159,7 @@ export function Hero() {
 
               <a
                 href={`mailto:${config.email}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-950 dark:hover:text-white border border-transparent dark:border-slate-800 transition-colors"
                 aria-label="Email Address"
               >
                 <Mail className="w-3.5 h-3.5" />
@@ -179,7 +179,7 @@ export function Hero() {
             <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-blue-600/15 via-indigo-600/10 to-purple-600/15 blur-xl pointer-events-none" />
 
             {/* Glass Code Window */}
-            <div className="relative rounded-2xl glass-card overflow-hidden border border-slate-300 shadow-xl bg-slate-950 text-slate-200">
+            <div className="relative rounded-2xl glass-card overflow-hidden border border-slate-300 dark:border-slate-800 shadow-xl bg-slate-950 text-slate-200">
               {/* Window Header */}
               <div className="flex items-center justify-between px-4 py-3 bg-slate-900 border-b border-slate-800">
                 <div className="flex items-center gap-2">
@@ -188,7 +188,7 @@ export function Hero() {
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/90" />
                   <span className="text-[11px] font-mono text-slate-400 pl-2 flex items-center gap-1.5">
                     <Terminal className="w-3 h-3 text-blue-400" />
-                    siva-core.java
+                    sivaharish-core.java
                   </span>
                 </div>
 
@@ -292,7 +292,7 @@ export function Hero() {
 
             {/* Floating Credibility Callout */}
             <motion.div
-              className="hidden sm:flex absolute -bottom-4 -left-3 items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white shadow-md border border-slate-200 text-xs font-semibold text-slate-800"
+              className="hidden sm:flex absolute -bottom-4 -left-3 items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 shadow-md border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200"
               animate={{ y: [0, -5, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
             >
@@ -306,7 +306,7 @@ export function Hero() {
 
       {/* Subtle Scroll Cue */}
       <div
-        className="mt-6 flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+        className="mt-6 flex flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors cursor-pointer"
         onClick={() => scrollTo("about")}
         aria-hidden="true"
       >

@@ -22,7 +22,7 @@ export function Interests() {
     <section
       id="interests"
       ref={ref}
-      className="py-32 bg-white relative overflow-hidden"
+      className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="interests-heading"
     >
       <div className="max-w-[1200px] mx-auto px-6 relative z-10">
@@ -35,7 +35,7 @@ export function Interests() {
               transition={{ duration: 0.5 }}
               className="mb-4"
             >
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 bg-blue-50 border border-blue-200 uppercase">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 bg-blue-50 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-400 dark:border-blue-900/60 uppercase">
                 <Sparkles className="w-3.5 h-3.5" />
                 Technical Curiosity
               </span>
@@ -46,10 +46,10 @@ export function Interests() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: 0.1 }}
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.15]"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.15]"
             >
               Always learning.{" "}
-              <span className="text-slate-400 font-normal">
+              <span className="text-slate-400 dark:text-slate-500 font-normal">
                 Always building.
               </span>
             </motion.h2>
@@ -59,7 +59,7 @@ export function Interests() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.55, delay: 0.2 }}
-            className="text-slate-600 max-w-sm text-sm leading-relaxed"
+            className="text-slate-600 dark:text-slate-400 max-w-sm text-sm leading-relaxed"
           >
             Areas of computer science and software development I am actively exploring and deepening my practical knowledge in.
           </motion.p>
@@ -73,16 +73,16 @@ export function Interests() {
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: i * 0.08 + 0.25, ease: "easeOut" }}
-              className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md transition-all group cursor-default"
+              className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group cursor-default"
               whileHover={{ y: -3 }}
             >
-              <div className="p-3 bg-white rounded-xl shadow-2xs border border-slate-200/60 w-fit mb-4 group-hover:scale-105 transition-transform">
+              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl shadow-2xs border border-slate-200/60 dark:border-slate-700 w-fit mb-4 group-hover:scale-105 transition-transform">
                 {iconMap[interest.icon] ?? <Server className="w-5 h-5 text-blue-600" />}
               </div>
-              <h3 className="font-bold text-base text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+              <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {interest.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 {interest.description}
               </p>
             </motion.div>

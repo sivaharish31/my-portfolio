@@ -42,12 +42,12 @@ export function CursorSpotlight() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-30 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 mix-blend-multiply blur-3xl"
+      className="pointer-events-none fixed top-0 left-0 z-30 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen blur-3xl"
       style={{
         x: mouseX,
         y: mouseY,
         background:
-          "radial-gradient(circle, rgba(37, 99, 235, 0.04) 0%, rgba(124, 58, 237, 0.02) 40%, transparent 70%)",
+          "radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.04) 40%, transparent 70%)",
       }}
       aria-hidden="true"
     />

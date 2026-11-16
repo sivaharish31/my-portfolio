@@ -31,7 +31,7 @@ export function Footer() {
                 <span className="text-white text-xs font-bold">SH</span>
               </div>
               <span className="font-bold text-white text-base tracking-tight">
-                Siva Harish
+                Sivaharish
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
@@ -117,7 +117,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p className="text-xs text-slate-400">
-            © {year} Siva Harish. All rights reserved. Built with React, TypeScript, Tailwind CSS, & Motion.
+            © {year} Sivaharish. All rights reserved. Built with React, TypeScript, Tailwind CSS, & Motion.
           </p>
           <button
             onClick={() => scrollTo("hero")}
