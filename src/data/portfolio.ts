@@ -20,7 +20,7 @@ export const config = {
   headline:
     "Engineering Student · Java Programmer · Data Structures & Algorithms · Open-Source Contributor · Aspiring Software Development Engineer",
   tagline: "Building software that solves real problems.",
-  email: "sivaharish3103@gmail.com",
+  email: "ssivaharish@outlook.com",
 
   // ── Availability & Status ────────────────────────────────
   available: true,
