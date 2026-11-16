@@ -16,16 +16,16 @@ const NAV_SHORTCUTS = [
   { label: "Contact", href: "contact" },
 ];
 
-export function Footer() {
-  const year = new Date().getFullYear();
+const CURRENT_YEAR = new Date().getFullYear();
 
+export function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800" role="contentinfo">
-      <div className="max-w-[1200px] mx-auto px-6 py-14">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-14 min-w-0">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 min-w-0">
           
           {/* Brand Info (5 cols) */}
-          <div className="lg:col-span-5 space-y-3">
+          <div className="lg:col-span-5 space-y-3 min-w-0">
             <div className="flex items-center gap-2.5">
               <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center shadow-xs">
                 <span className="text-white text-xs font-bold">SH</span>
@@ -43,7 +43,7 @@ export function Footer() {
           </div>
 
           {/* Nav shortcuts (3 cols) */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 min-w-0">
             <p className="text-xs font-semibold tracking-wider text-slate-300 uppercase mb-4">
               Navigation
             </p>
@@ -62,7 +62,7 @@ export function Footer() {
           </div>
 
           {/* Social Profiles (4 cols) */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4 min-w-0">
             <p className="text-xs font-semibold tracking-wider text-slate-300 uppercase mb-4">
               Developer Profiles
             </p>
@@ -116,8 +116,8 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-12 pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-xs text-slate-400">
-            © {year} Sivaharish. All rights reserved. Built with React, TypeScript, Tailwind CSS, & Motion.
+          <p className="text-xs text-slate-400 break-words">
+            © {CURRENT_YEAR} Sivaharish. All rights reserved. Built with React, TypeScript, Tailwind CSS, & Motion.
           </p>
           <button
             onClick={() => scrollTo("hero")}

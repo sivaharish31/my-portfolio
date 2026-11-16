@@ -35,7 +35,7 @@ export function UnifiedDeveloperIdentity() {
       className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="identity-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="max-w-2xl mb-14">
           <motion.div
@@ -71,7 +71,7 @@ export function UnifiedDeveloperIdentity() {
         </div>
 
         {/* 8-Platform Unified Matrix */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 min-w-0">
           {unifiedDeveloperIdentity.map((item, idx) => (
             <motion.a
               key={item.platform}
@@ -81,7 +81,7 @@ export function UnifiedDeveloperIdentity() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: idx * 0.05 + 0.2 }}
-              className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group flex flex-col justify-between"
+              className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group flex flex-col justify-between min-w-0"
               whileHover={{ y: -3 }}
             >
               <div>
@@ -95,14 +95,14 @@ export function UnifiedDeveloperIdentity() {
                   </span>
                 </div>
 
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
                   {item.category}
                 </p>
                 <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
                   <span>{item.platform}</span>
                   <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5 mb-2.5">
+                <p className="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5 mb-2.5">
                   @{item.handle}
                 </p>
                 <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -112,7 +112,7 @@ export function UnifiedDeveloperIdentity() {
 
               <div className="pt-3 mt-4 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-[11px] font-medium text-blue-600 dark:text-blue-400">
                 <span>View Profile</span>
-                <ExternalLink className="w-3 h-3 text-slate-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
+                <ExternalLink className="w-3 h-3 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </div>
             </motion.a>
           ))}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Menu, X, Circle } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "./icons";
@@ -29,6 +29,17 @@ export function Navbar() {
   const activeSection = useScrollSpy(SECTION_IDS);
   const scrolled = useScrolled(20);
 
+  // Close mobile drawer on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menuOpen) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen]);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-3 sm:px-6 pt-3 sm:pt-3.5">
       <div
@@ -53,7 +64,7 @@ export function Navbar() {
             <span className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white tracking-tight leading-none">
               Sivaharish
             </span>
-            <span className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-mono tracking-tight mt-0.5">
+            <span className="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400 font-mono tracking-tight mt-0.5">
               CSE · 2029
             </span>
           </div>
@@ -133,10 +144,11 @@ export function Navbar() {
         <div className="flex items-center gap-1.5 md:hidden">
           <ThemeToggle />
           <button
-            className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -147,6 +159,9 @@ export function Navbar() {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
+            id="mobile-navigation"
+            role="region"
+            aria-label="Mobile Navigation"
             initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}

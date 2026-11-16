@@ -25,7 +25,7 @@ export function GitHubActivity() {
       className="py-20 md:py-24 bg-slate-50/60 dark:bg-slate-950/60 border-t border-slate-200/60 dark:border-slate-800/80 relative overflow-hidden"
       aria-labelledby="github-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="max-w-xl mb-12">
           <motion.div
@@ -60,9 +60,9 @@ export function GitHubActivity() {
           </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+        <div className="grid lg:grid-cols-12 gap-8 items-start min-w-0 w-full">
           {/* Left Column: Live GitHub Stats Card (5 cols) */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 min-w-0 w-full">
             {loading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
@@ -83,14 +83,18 @@ export function GitHubActivity() {
                 <div className="flex items-center gap-4 pb-5 border-b border-slate-100 dark:border-slate-800">
                   <img
                     src={user.avatar_url}
-                    alt={`${user.name}'s GitHub Avatar`}
-                    className="w-14 h-14 rounded-2xl border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700"
+                    alt={`${user.name || "Sivaharish"}'s GitHub Avatar`}
+                    width={56}
+                    height={56}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-14 h-14 rounded-2xl border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700 object-cover"
                   />
                   <div>
                     <h3 className="font-bold text-slate-900 dark:text-white text-base leading-tight">
                       {user.name || "Sivaharish"}
                     </h3>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">
+                    <p className="text-xs text-slate-600 dark:text-slate-400 font-mono mt-0.5">
                       @{user.login}
                     </p>
                     {user.bio && (
@@ -172,8 +176,8 @@ export function GitHubActivity() {
           </div>
 
           {/* Right Column: Visual Contribution Chart (7 cols) */}
-          <div className="lg:col-span-7">
-            <div className="p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4">
+          <div className="lg:col-span-7 min-w-0 w-full">
+            <div className="p-4 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-sm space-y-4 min-w-0 max-w-full">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -187,10 +191,14 @@ export function GitHubActivity() {
               </div>
 
               {/* GitHub Contribution Graph Embed */}
-              <div className="overflow-x-auto rounded-xl p-2 bg-slate-50/60 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 flex items-center justify-center min-h-[140px]">
+              <div className="overflow-x-auto max-w-full rounded-xl p-2 bg-slate-50/60 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 flex items-center justify-center min-h-[140px]">
                 <img
                   src="https://ghchart.rshah.org/2563EB/sivaharish31"
-                  alt="Sivaharish GitHub contribution chart"
+                  alt="Sivaharish GitHub contribution chart showing public commits and pull requests"
+                  width={650}
+                  height={110}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-auto min-w-[500px] dark:brightness-110"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
@@ -198,7 +206,7 @@ export function GitHubActivity() {
                 />
               </div>
 
-              <div className="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500 font-mono pt-1">
+              <div className="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400 font-mono pt-1">
                 <span>Reflects public commits and pull requests</span>
                 <span>Year to date</span>
               </div>

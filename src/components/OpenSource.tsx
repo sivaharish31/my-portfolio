@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, GitPullRequest, CheckCircle2, Circle, XCircle, Globe, GitBranch } from "lucide-react";
 import { contributions, communityLinks, type Contribution } from "../data/portfolio";
-import { fetchPRStatus, type PRStatus } from "../services/github";
+import { type PRStatus } from "../services/github";
 
 const orgThemes: Record<
   string,
@@ -91,7 +91,7 @@ function ContributionCard({
 
   return (
     <div
-      className={`p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all group flex flex-col justify-between h-full ${theme.accentGlow}`}
+      className={`p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all group flex flex-col justify-between h-full min-w-0 ${theme.accentGlow}`}
     >
       <div>
         {/* Header */}
@@ -103,6 +103,11 @@ function ContributionCard({
               <img
                 src={contribution.orgLogoUrl}
                 alt=""
+                aria-hidden="true"
+                width={14}
+                height={14}
+                loading="lazy"
+                decoding="async"
                 className="w-3.5 h-3.5 object-contain"
               />
               {contribution.orgDisplayName}
@@ -150,7 +155,7 @@ function ContributionCard({
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-          aria-label={`View Pull Request on GitHub: ${contribution.prTitle}`}
+          aria-label={`View PR #${contribution.prNumber} on GitHub: ${contribution.prTitle}`}
         >
           <span>View PR</span>
           <ExternalLink className="w-3 h-3" />
@@ -163,24 +168,9 @@ function ContributionCard({
 export function OpenSource() {
   const [filter, setFilter] = useState<"all" | "merged" | "open">("all");
 
-  const [statuses, setStatuses] = useState<Record<string, PRStatus>>(() =>
-    Object.fromEntries(contributions.map((c) => [c.id, c.status]))
-  );
-
-  useEffect(() => {
-    contributions.forEach((c) => {
-      fetchPRStatus(c.prUrl).then((fetchedStatus) => {
-        if (fetchedStatus !== "unknown") {
-          setStatuses((prev) => ({ ...prev, [c.id]: fetchedStatus }));
-        }
-      });
-    });
-  }, []);
-
   const filteredContributions = contributions.filter((c) => {
-    const currentStatus = statuses[c.id] || c.status;
-    if (filter === "merged") return currentStatus === "merged";
-    if (filter === "open") return currentStatus === "open";
+    if (filter === "merged") return c.status === "merged";
+    if (filter === "open") return c.status === "open";
     return true;
   });
 
@@ -190,7 +180,7 @@ export function OpenSource() {
       className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="oss-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
@@ -254,7 +244,16 @@ export function OpenSource() {
               key={org.name}
               className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 dark:bg-slate-800/80 rounded-xl text-xs font-semibold text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-2xs"
             >
-              <img src={org.logo} alt="" className="w-3.5 h-3.5 object-contain" />
+              <img
+                src={org.logo}
+                alt=""
+                aria-hidden="true"
+                width={14}
+                height={14}
+                loading="lazy"
+                decoding="async"
+                className="w-3.5 h-3.5 object-contain"
+              />
               <span>{org.name}</span>
             </span>
           ))}
@@ -268,13 +267,13 @@ export function OpenSource() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10"
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10 min-w-0"
           >
             {filteredContributions.map((contribution) => (
               <ContributionCard
                 key={contribution.id}
                 contribution={contribution}
-                status={statuses[contribution.id] || contribution.status}
+                status={contribution.status}
               />
             ))}
           </motion.div>
@@ -308,7 +307,7 @@ export function OpenSource() {
         </div>
 
         {/* Note */}
-        <p className="mt-6 text-xs text-slate-400 dark:text-slate-500 text-center font-mono">
+        <p className="mt-6 text-xs text-slate-600 dark:text-slate-400 text-center font-mono">
           PR statuses are verified against live GitHub API endpoints.
         </p>
       </div>

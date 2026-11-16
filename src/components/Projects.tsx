@@ -10,12 +10,12 @@ function ContestCompassShowcase({ project }: { project: Project }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-lg overflow-hidden p-6 sm:p-8 lg:p-10"
+      className="rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-lg overflow-hidden p-4 sm:p-8 lg:p-10 min-w-0 w-full"
     >
-      <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start min-w-0 w-full">
         
         {/* Left Column: Project Details & Features (7 cols) */}
-        <div className="lg:col-span-7 space-y-5">
+        <div className="lg:col-span-7 space-y-5 min-w-0 w-full">
           {/* Header Badges */}
           <div className="flex items-center gap-2.5 flex-wrap">
             <span className="px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800/70">
@@ -103,7 +103,7 @@ function ContestCompassShowcase({ project }: { project: Project }) {
         </div>
 
         {/* Right Column: Interactive Product Presentation (5 cols) */}
-        <div className="lg:col-span-5 relative">
+        <div className="lg:col-span-5 relative min-w-0 w-full">
           <div className="rounded-2xl glass-panel p-5 border border-slate-300 dark:border-slate-700/80 shadow-md bg-slate-50/70 dark:bg-slate-900/80 space-y-3.5">
             
             {/* App Mockup Header */}
@@ -112,7 +112,11 @@ function ContestCompassShowcase({ project }: { project: Project }) {
                 <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 shadow-xs border border-slate-200 dark:border-slate-700 p-1.5 flex items-center justify-center">
                   <img
                     src="/contest-compass-logo.png"
-                    alt="Contest Compass"
+                    alt="Contest Compass logo"
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-contain"
                   />
                 </div>
@@ -143,7 +147,7 @@ function ContestCompassShowcase({ project }: { project: Project }) {
                     Div. 2
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
                   <span className="flex items-center gap-1 font-mono">
                     <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" /> Starts in 2h 15m
                   </span>
@@ -162,7 +166,7 @@ function ContestCompassShowcase({ project }: { project: Project }) {
                     Rated
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
                   <span className="flex items-center gap-1 font-mono">
                     <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" /> Sunday 8:00 AM
                   </span>
@@ -181,7 +185,7 @@ function ContestCompassShowcase({ project }: { project: Project }) {
                     ABC
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] text-slate-500 dark:text-slate-400 mt-2">
                   <span className="flex items-center gap-1 font-mono">
                     <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" /> Saturday 5:30 PM
                   </span>
@@ -212,7 +216,7 @@ export function Projects() {
       className="py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="projects-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         
         {/* Header */}
         <motion.div

@@ -25,7 +25,7 @@ export function Interests() {
       className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="interests-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="max-w-xl">
@@ -49,7 +49,7 @@ export function Interests() {
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.15]"
             >
               Always learning.{" "}
-              <span className="text-slate-400 dark:text-slate-500 font-normal">
+              <span className="text-slate-500 dark:text-slate-400 font-normal">
                 Always building.
               </span>
             </motion.h2>
@@ -66,14 +66,14 @@ export function Interests() {
         </div>
 
         {/* Bento Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 min-w-0">
           {interests.map((interest, i) => (
             <motion.div
               key={interest.title}
               initial={{ opacity: 0, y: 24 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: i * 0.08 + 0.25, ease: "easeOut" }}
-              className="p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group cursor-default"
+              className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group cursor-default min-w-0"
               whileHover={{ y: -3 }}
             >
               <div className="p-3 bg-white dark:bg-slate-900 rounded-xl shadow-2xs border border-slate-200/60 dark:border-slate-700 w-fit mb-4 group-hover:scale-105 transition-transform">

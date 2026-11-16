@@ -4,18 +4,16 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 
 export function CursorSpotlight() {
   const prefersReduced = useReducedMotion();
-  const [isTouchDevice, setIsTouchDevice] = useState(true);
+  const [isTouchDevice] = useState(
+    () => typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches
+  );
   const [isVisible, setIsVisible] = useState(false);
 
   const mouseX = useSpring(0, { stiffness: 50, damping: 20 });
   const mouseY = useSpring(0, { stiffness: 50, damping: 20 });
 
   useEffect(() => {
-    // Check if device supports fine pointer (mouse)
-    const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
-    setIsTouchDevice(!hasFinePointer);
-
-    if (!hasFinePointer) return;
+    if (isTouchDevice) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -34,7 +32,7 @@ export function CursorSpotlight() {
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [mouseX, mouseY, isVisible]);
+  }, [mouseX, mouseY, isVisible, isTouchDevice]);
 
   if (prefersReduced || isTouchDevice || !isVisible) {
     return null;

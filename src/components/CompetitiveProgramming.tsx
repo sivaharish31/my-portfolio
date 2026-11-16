@@ -33,7 +33,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
 
   return (
     <div
-      className="p-6 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden"
+      className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0"
     >
       {/* Top ambient lighting tint */}
       <div
@@ -80,11 +80,11 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
                 <p className="text-base font-extrabold text-slate-900 dark:text-white leading-none">
                   {val}
                 </p>
-                <p className="text-[10px] font-mono uppercase text-slate-500 dark:text-slate-400 mt-1 truncate">
+                <p className="text-[10px] font-mono uppercase text-slate-600 dark:text-slate-400 mt-1 truncate">
                   {stat.label}
                 </p>
                 {sub && (
-                  <p className="text-[9px] text-slate-400 dark:text-slate-500 font-mono truncate mt-0.5">
+                  <p className="text-[10px] text-slate-600 dark:text-slate-400 font-mono truncate mt-0.5">
                     {sub}
                   </p>
                 )}
@@ -120,7 +120,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-600 dark:text-slate-400 mt-1.5">
               <span>Easy: <strong className="text-slate-800 dark:text-slate-200">{platform.breakdown.easy}</strong></span>
               <span>Medium: <strong className="text-slate-800 dark:text-slate-200">{platform.breakdown.medium}</strong></span>
-              <span className="text-slate-400 dark:text-slate-500">Hard: 0</span>
+              <span className="text-slate-600 dark:text-slate-400">Hard: 0</span>
             </div>
           </div>
         )}
@@ -163,7 +163,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
               <Trophy className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <div>
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Peak Contest Rating</p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400">CodeChef Division 4</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400">CodeChef Division 4</p>
               </div>
             </div>
             <span className="text-sm font-extrabold font-mono text-amber-900 dark:text-amber-300 bg-white dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-amber-200 dark:border-amber-800/60">
@@ -179,7 +179,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
               <Activity className="w-4 h-4 text-slate-700 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">AtCoder Beginner Contests</p>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400">3 Rated Rounds Competed</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400">3 Rated Rounds Competed</p>
               </div>
             </div>
             <span className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
@@ -191,7 +191,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
 
       {/* Card Action */}
       <div className="pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between mt-2">
-        <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500 flex items-center gap-1">
+        <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1">
           <Clock className="w-3 h-3" />
           {platform.lastVerified}
         </span>
@@ -200,7 +200,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
           href={platform.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 text-xs font-semibold shadow-2xs transition-colors cursor-pointer group"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 text-xs font-semibold shadow-2xs transition-colors cursor-pointer group focus-visible:ring-2 focus-visible:ring-blue-500"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
@@ -227,7 +227,7 @@ export function CompetitiveProgramming() {
       className="py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="cp-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         
         {/* Section Header */}
         <motion.div
@@ -260,63 +260,63 @@ export function CompetitiveProgramming() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55, delay: 0.1 }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-10"
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-10 min-w-0"
         >
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Problems Solved</span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
               335+
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               LeetCode (180), CodeChef (135), Codeforces (20)
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Peak Rating</span>
               <Trophy className="w-4 h-4 text-amber-500" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
               1409
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               CodeChef Division 4 · Codeforces 810
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Active Platforms</span>
               <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
               4
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               LeetCode · Codeforces · AtCoder · CodeChef
             </p>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 mb-1">
+          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Primary Language</span>
               <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
               Java
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               Object-oriented design & algorithms
             </p>
           </div>
         </motion.div>
 
         {/* 4 Dashboard Platform Cards */}
-        <div className="grid md:grid-cols-2 gap-5 sm:gap-6 mb-8">
+        <div className="grid md:grid-cols-2 gap-5 sm:gap-6 mb-8 min-w-0">
           {competitiveProfiles.map((platform) => (
             <PlatformCard
               key={platform.id}

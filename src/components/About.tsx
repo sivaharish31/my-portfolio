@@ -16,7 +16,7 @@ export function About() {
       className="py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-y border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="about-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         
         {/* Section Header */}
         <motion.div
@@ -24,7 +24,7 @@ export function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55 }}
-          className="mb-12"
+          className="mb-12 min-w-0"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/70 uppercase mb-3">
             <Compass className="w-3.5 h-3.5" />
@@ -33,7 +33,7 @@ export function About() {
 
           <h2
             id="about-heading"
-            className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] max-w-2xl"
+            className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] max-w-2xl break-words"
           >
             Driven by curiosity.{" "}
             <span className="text-slate-400 dark:text-slate-500 font-normal">
@@ -43,7 +43,7 @@ export function About() {
         </motion.div>
 
         {/* 2-Column Asymmetric Composition */}
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-14 items-start min-w-0">
           
           {/* Left Column: Narrative & Quote (7 cols) */}
           <motion.div
@@ -51,21 +51,21 @@ export function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="lg:col-span-7 space-y-5"
+            className="lg:col-span-7 space-y-5 min-w-0 w-full"
           >
             {config.about.paragraphs.map((para, i) => (
               <p
                 key={i}
-                className="text-slate-700 dark:text-slate-300 text-base sm:text-lg leading-relaxed"
+                className="text-slate-700 dark:text-slate-300 text-base sm:text-lg leading-relaxed break-words"
               >
                 {para}
               </p>
             ))}
 
             {/* Philosophy Callout Quote */}
-            <div className="mt-8 p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs relative overflow-hidden">
+            <div className="mt-8 p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800 shadow-2xs relative overflow-hidden min-w-0">
               <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-600 to-indigo-600" />
-              <p className="text-slate-800 dark:text-slate-200 text-sm sm:text-base italic leading-relaxed pl-2 font-medium">
+              <p className="text-slate-800 dark:text-slate-200 text-sm sm:text-base italic leading-relaxed pl-2 font-medium break-words">
                 "Good software is not just about making something work. It's about making it reliable, maintainable, and engineered with discipline."
               </p>
             </div>
@@ -77,9 +77,9 @@ export function About() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-5 space-y-4"
+            className="lg:col-span-5 space-y-4 min-w-0 w-full"
           >
-            <p className="text-xs font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase mb-1">
+            <p className="text-xs font-semibold tracking-wider text-slate-600 dark:text-slate-400 uppercase mb-1">
               Core Engineering Focus
             </p>
 
@@ -119,8 +119,8 @@ export function About() {
                 {config.education.college}
               </p>
 
-              <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+              <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+                <MapPin className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
                 <span>{config.education.location}</span>
                 <span className="text-slate-300 dark:text-slate-700">·</span>
                 <span>Computer Science & Engineering</span>

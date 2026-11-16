@@ -61,7 +61,7 @@ export function Skills() {
       className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="skills-heading"
     >
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         
         {/* Section Header */}
         <motion.div
@@ -119,7 +119,7 @@ export function Skills() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 min-w-0"
           >
             {displayedCategories.map((category) => {
               const style =
@@ -132,7 +132,7 @@ export function Skills() {
               return (
                 <div
                   key={category.title}
-                  className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-md transition-all flex flex-col justify-between group"
+                  className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-md transition-all flex flex-col justify-between group min-w-0"
                 >
                   <div>
                     {/* Header */}
@@ -163,7 +163,7 @@ export function Skills() {
                     </div>
                   </div>
 
-                  <div className="mt-5 pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                  <div className="mt-5 pt-3 border-t border-slate-200/60 dark:border-slate-800 flex items-center justify-between text-[11px] font-mono text-slate-600 dark:text-slate-400">
                     <span>{category.items.length} items verified</span>
                     <span>✓ Active Knowledge</span>
                   </div>
@@ -174,7 +174,7 @@ export function Skills() {
         </AnimatePresence>
 
         {/* Clean Note */}
-        <p className="mt-8 text-xs text-slate-400 dark:text-slate-500 text-center font-mono">
+        <p className="mt-8 text-xs text-slate-600 dark:text-slate-400 text-center font-mono">
           Technologies and proficiency levels reflect active coursework and verified project code.
         </p>
       </div>
