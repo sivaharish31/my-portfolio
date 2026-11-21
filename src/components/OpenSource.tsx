@@ -1,8 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ExternalLink, GitPullRequest, CheckCircle2, Circle, XCircle, Globe, GitBranch } from "lucide-react";
+import {
+  ExternalLink,
+  GitPullRequest,
+  CheckCircle2,
+  Circle,
+  XCircle,
+  Globe,
+  GitBranch,
+  HelpCircle,
+} from "lucide-react";
 import { contributions, communityLinks, type Contribution } from "../data/portfolio";
-import { type PRStatus } from "../services/github";
+import { fetchPRStatus, type PRStatus } from "../services/github";
 
 const orgThemes: Record<
   string,
@@ -40,8 +49,22 @@ const orgThemes: Record<
   },
 };
 
-function StatusBadge({ status }: { status: PRStatus }) {
-  if (status === "merged") {
+export interface LivePRState {
+  status: PRStatus;
+  loading: boolean;
+}
+
+function StatusBadge({ state }: { state?: LivePRState }) {
+  if (!state || state.loading) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-medium rounded-full border border-slate-200 dark:border-slate-700 animate-pulse">
+        <Circle className="w-2 h-2 fill-slate-400" />
+        Checking…
+      </span>
+    );
+  }
+
+  if (state.status === "merged") {
     return (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 text-xs font-bold rounded-full border border-purple-200 dark:border-purple-800/70 shadow-2xs">
         <CheckCircle2 className="w-3 h-3 text-purple-600 dark:text-purple-400" />
@@ -49,7 +72,8 @@ function StatusBadge({ status }: { status: PRStatus }) {
       </span>
     );
   }
-  if (status === "open") {
+
+  if (state.status === "open") {
     return (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-full border border-emerald-200 dark:border-emerald-800/70 shadow-2xs">
         <GitPullRequest className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
@@ -57,7 +81,8 @@ function StatusBadge({ status }: { status: PRStatus }) {
       </span>
     );
   }
-  if (status === "closed") {
+
+  if (state.status === "closed") {
     return (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-bold rounded-full border border-slate-200 dark:border-slate-700">
         <XCircle className="w-3 h-3 text-slate-500 dark:text-slate-400" />
@@ -65,20 +90,25 @@ function StatusBadge({ status }: { status: PRStatus }) {
       </span>
     );
   }
+
+  // "unknown" — unauthenticated rate limit reached or network issue
   return (
-    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs font-medium rounded-full">
-      <Circle className="w-2.5 h-2.5" />
-      Checking…
+    <span
+      title="Live status unavailable due to public API rate limits or network issues"
+      className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 text-xs font-medium rounded-full border border-dashed border-slate-300 dark:border-slate-700"
+    >
+      <HelpCircle className="w-3 h-3 text-slate-400" />
+      Status Unavailable
     </span>
   );
 }
 
 function ContributionCard({
   contribution,
-  status,
+  liveState,
 }: {
   contribution: Contribution;
-  status: PRStatus;
+  liveState?: LivePRState;
 }) {
   const orgKey = contribution.org.toLowerCase();
   const theme =
@@ -90,38 +120,42 @@ function ContributionCard({
     };
 
   return (
-    <div
-      className={`p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all group flex flex-col justify-between h-full min-w-0 ${theme.accentGlow}`}
+    <motion.a
+      href={contribution.prUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      whileHover={{ y: -4 }}
+      aria-label={`View Pull Request #${contribution.prNumber} on GitHub: ${contribution.prTitle} (${contribution.orgDisplayName})`}
+      className={`p-5 sm:p-6 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group flex flex-col justify-between h-full min-w-0 cursor-pointer ${theme.accentGlow}`}
     >
       <div>
         {/* Header */}
         <div className="flex items-start justify-between gap-3 mb-3.5">
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
             <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-xl border ${theme.bg} ${theme.text} ${theme.border} shadow-2xs`}
+              className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-xl border ${theme.bg} ${theme.text} ${theme.border} shadow-2xs flex-shrink-0`}
             >
               <img
                 src={contribution.orgLogoUrl}
-                alt=""
-                aria-hidden="true"
+                alt={`${contribution.orgDisplayName} logo`}
                 width={14}
                 height={14}
                 loading="lazy"
                 decoding="async"
                 className="w-3.5 h-3.5 object-contain"
               />
-              {contribution.orgDisplayName}
+              <span>{contribution.orgDisplayName}</span>
             </span>
-            <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 truncate">
               /{contribution.repo} #{contribution.prNumber}
             </span>
           </div>
 
-          <StatusBadge status={status} />
+          <StatusBadge state={liveState} />
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug mb-2.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        <h3 className="font-bold text-base text-slate-900 dark:text-white leading-snug mb-2.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors break-words">
           {contribution.prTitle}
         </h3>
 
@@ -150,27 +184,52 @@ function ContributionCard({
           {contribution.language}
         </span>
 
-        <a
-          href={contribution.prUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
-          aria-label={`View PR #${contribution.prNumber} on GitHub: ${contribution.prTitle}`}
-        >
-          <span>View PR</span>
-          <ExternalLink className="w-3 h-3" />
-        </a>
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors">
+          <span>View Pull Request</span>
+          <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        </span>
       </div>
-    </div>
+    </motion.a>
   );
 }
 
 export function OpenSource() {
   const [filter, setFilter] = useState<"all" | "merged" | "open">("all");
+  const [prStatuses, setPrStatuses] = useState<Record<string, LivePRState>>(() => {
+    const initial: Record<string, LivePRState> = {};
+    for (const c of contributions) {
+      initial[c.id] = { status: "unknown", loading: true };
+    }
+    return initial;
+  });
+
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    contributions.forEach((c) => {
+      fetchPRStatus(c.prUrl, controller.signal).then((status) => {
+        if (controller.signal.aborted) return;
+        setPrStatuses((prev) => ({
+          ...prev,
+          [c.id]: { status, loading: false },
+        }));
+      });
+    });
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   const filteredContributions = contributions.filter((c) => {
-    if (filter === "merged") return c.status === "merged";
-    if (filter === "open") return c.status === "open";
+    const live = prStatuses[c.id];
+    // If live status is determined, use it; if still loading, use initial static status
+    const effectiveStatus = live && !live.loading ? live.status : c.status;
+    if (filter === "merged") return effectiveStatus === "merged";
+    if (filter === "open") return effectiveStatus === "open";
     return true;
   });
 
@@ -181,7 +240,6 @@ export function OpenSource() {
       aria-labelledby="oss-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
-        
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <motion.div
@@ -206,7 +264,7 @@ export function OpenSource() {
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
               Selected contributions to repositories maintained by{" "}
               <strong className="text-slate-900 dark:text-white font-semibold">Netflix</strong>,{" "}
-              <strong className="text-slate-900 dark:text-white font-semibold">Microsoft</strong>,{" "}
+              <strong className="text-slate-900 dark:text-white font-semibold">Microsoft Azure</strong>,{" "}
               <strong className="text-slate-900 dark:text-white font-semibold">Google</strong>,{" "}
               <strong className="text-slate-900 dark:text-white font-semibold">AWS</strong>, and{" "}
               <strong className="text-slate-900 dark:text-white font-semibold">IBM</strong>.
@@ -235,7 +293,7 @@ export function OpenSource() {
         <div className="flex flex-wrap gap-2 mb-8">
           {[
             { name: "Netflix", logo: "/logos/netflix.svg" },
-            { name: "Microsoft", logo: "/logos/microsoft.svg" },
+            { name: "Microsoft Azure", logo: "/logos/microsoft.svg" },
             { name: "Google", logo: "/logos/google.svg" },
             { name: "AWS", logo: "/logos/aws.svg" },
             { name: "IBM", logo: "/logos/ibm.svg" },
@@ -246,8 +304,7 @@ export function OpenSource() {
             >
               <img
                 src={org.logo}
-                alt=""
-                aria-hidden="true"
+                alt={`${org.name} logo`}
                 width={14}
                 height={14}
                 loading="lazy"
@@ -273,7 +330,7 @@ export function OpenSource() {
               <ContributionCard
                 key={contribution.id}
                 contribution={contribution}
-                status={contribution.status}
+                liveState={prStatuses[contribution.id]}
               />
             ))}
           </motion.div>
@@ -306,9 +363,9 @@ export function OpenSource() {
           </a>
         </div>
 
-        {/* Note */}
-        <p className="mt-6 text-xs text-slate-600 dark:text-slate-400 text-center font-mono">
-          PR statuses are verified against live GitHub API endpoints.
+        {/* Accurate live API note */}
+        <p className="mt-6 text-xs text-slate-500 dark:text-slate-400 text-center font-mono">
+          PR statuses are queried live from public GitHub API endpoints. If GitHub unauthenticated rate limits are reached or network issues occur, cards display &ldquo;Status Unavailable&rdquo; rather than unverified information.
         </p>
       </div>
     </section>

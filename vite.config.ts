@@ -7,4 +7,23 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+              return 'vendor-react';
+            }
+            if (id.includes('motion')) {
+              return 'vendor-motion';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+          }
+        },
+      },
+    },
+  },
 })

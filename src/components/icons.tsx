@@ -126,3 +126,79 @@ export function CodeChefIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function OracleIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M16.4 5H7.6C3.4 5 0 8.4 0 12.6s3.4 7.6 7.6 7.6h8.8c4.2 0 7.6-3.4 7.6-7.6S20.6 5 16.4 5zm-.2 11.4H7.8c-2.1 0-3.8-1.7-3.8-3.8s1.7-3.8 3.8-3.8h8.4c2.1 0 3.8 1.7 3.8 3.8s-1.7 3.8-3.8 3.8z"
+        fill="#C74634"
+      />
+    </svg>
+  );
+}
+
+export function AWSIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className={className}
+      aria-hidden="true"
+    >
+      <path
+        d="M18.8 17.5c-2.4 1.8-5.8 2.8-8.8 2.8-4.2 0-8-1.5-10.9-4.1-.2-.2-.3-.5-.1-.7.2-.2.5-.2.7 0 2.6 2.3 6.2 3.8 10.3 3.8 2.8 0 5.9-1 8.2-2.6.3-.2.7-.2.9.1.2.3.1.7-.3.7zm1.6-1.5c-.3-.4-1.9-.2-2.9-.1-.3 0-.4-.2-.2-.4 1.3-1.4 3.4-.6 3.7-.3.3.3.2 2.4-.9 3.6-.2.2-.4.1-.4-.1.1-1 .7-2.3.7-2.7zM12.2 4.4c.5 1.4 1 2.9 1.5 4.3h-3c.5-1.4 1-2.9 1.5-4.3zm2.5 7h-5l-.9 2.5H6.5l4.6-12h2.2l4.6 12h-2.3l-.9-2.5z"
+        fill="#FF9900"
+      />
+    </svg>
+  );
+}
+
+export function NPTELIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+      <path d="M6 12v5c3 3 9 3 12 0v-5" />
+      <path d="M12 17v4" />
+    </svg>
+  );
+}
+
+export function INIIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="18" height="14" rx="2" />
+      <path d="M7 21h10" />
+      <path d="M12 17v4" />
+      <path d="M7 8l3 3-3 3" />
+      <path d="M12 14h5" />
+    </svg>
+  );
+}

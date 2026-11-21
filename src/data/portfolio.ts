@@ -192,7 +192,7 @@ export const contributions: Contribution[] = [
   {
     id: "azure-sdk",
     org: "microsoft",
-    orgDisplayName: "Microsoft",
+    orgDisplayName: "Microsoft Azure",
     orgLogoUrl: "/logos/microsoft.svg",
     repo: "azure-sdk-for-java",
     prNumber: 51059,
@@ -474,5 +474,89 @@ export const unifiedDeveloperIdentity = [
     url: "https://www.linkedin.com/in/ssivaharish",
     description: "Professional updates, engineering student journey, and technical connections.",
     highlight: "Student @ St. Joseph's",
+  },
+];
+
+// ── Certifications & Training ─────────────────────────────────
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  category: "Certification" | "Training Badge" | "Course" | "Course (Elite)";
+  badgeLabel: string;
+  statusLabel: string;
+  description: string;
+  isAws?: boolean;
+  accentGlow: string;
+}
+
+export const certifications: Certification[] = [
+  {
+    id: "oracle-agentic-ai",
+    name: "Agentic AI Certified Foundations Associate",
+    issuer: "Oracle",
+    category: "Certification",
+    badgeLabel: "Certification",
+    statusLabel: "Certification Earned",
+    description:
+      "Foundations associate certification covering core principles and architectures of agentic AI systems.",
+    accentGlow: "from-red-500/10 via-red-500/5 to-transparent",
+  },
+  {
+    id: "aws-cloud-operations",
+    name: "Graduate - Cloud Operations Training Badge",
+    issuer: "AWS Academy",
+    category: "Training Badge",
+    badgeLabel: "AWS Training Badge",
+    statusLabel: "Training Badge Earned",
+    description:
+      "AWS Academy graduate training in cloud operations, system administration, and infrastructure provisioning.",
+    isAws: true,
+    accentGlow: "from-amber-500/10 via-amber-500/5 to-transparent",
+  },
+  {
+    id: "aws-ml-nlp",
+    name: "Graduate - Machine Learning for Natural Language Processing Training Badge",
+    issuer: "AWS Academy",
+    category: "Training Badge",
+    badgeLabel: "AWS Training Badge",
+    statusLabel: "Training Badge Earned",
+    description:
+      "AWS Academy graduate training in machine learning workflows applied to natural language processing.",
+    isAws: true,
+    accentGlow: "from-amber-500/10 via-amber-500/5 to-transparent",
+  },
+  {
+    id: "nptel-dbms",
+    name: "Database Management System",
+    issuer: "NPTEL",
+    category: "Course",
+    badgeLabel: "Course",
+    statusLabel: "Coursework Completed",
+    description:
+      "Academic course completion covering relational database management systems and SQL fundamentals.",
+    accentGlow: "from-emerald-500/10 via-emerald-500/5 to-transparent",
+  },
+  {
+    id: "nptel-python-data-science",
+    name: "Python for Data Science (Elite)",
+    issuer: "NPTEL",
+    category: "Course (Elite)",
+    badgeLabel: "Elite Distinction",
+    statusLabel: "Coursework Completed (Elite)",
+    description:
+      "Academic course in Python programming for data science, completed with Elite standing distinction.",
+    accentGlow: "from-indigo-500/10 via-indigo-500/5 to-transparent",
+  },
+  {
+    id: "ini-fundamentals-computing",
+    name: "Fundamentals of Computing",
+    issuer: "INI",
+    category: "Course",
+    badgeLabel: "Course",
+    statusLabel: "Coursework Completed",
+    description:
+      "Foundational course covering computing essentials, fundamental architecture, and programming logic.",
+    accentGlow: "from-sky-500/10 via-sky-500/5 to-transparent",
   },
 ];

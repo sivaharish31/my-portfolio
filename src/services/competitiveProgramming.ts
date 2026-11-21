@@ -24,7 +24,12 @@ export interface CodeforcesRatingHistory {
  */
 export async function fetchCodeforcesStats(handle: string): Promise<CodeforcesProfile | null> {
   try {
-    const res = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 2000);
+    const res = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
     if (!res.ok) return null;
     const data = await res.json();
     if (data.status === "OK" && data.result && data.result.length > 0) {

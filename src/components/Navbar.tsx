@@ -14,6 +14,7 @@ const NAV_ITEMS = [
   { label: "Projects", href: "projects" },
   { label: "Open Source", href: "opensource" },
   { label: "Problem Solving", href: "competitive" },
+  { label: "Certifications", href: "certifications" },
   { label: "Contact", href: "contact" },
 ];
 
@@ -72,7 +73,7 @@ export function Navbar() {
 
         {/* Desktop Nav Items */}
         <nav
-          className="hidden md:flex items-center gap-1 bg-slate-100/70 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800"
+          className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/70 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800"
           role="navigation"
           aria-label="Main navigation"
         >
@@ -82,7 +83,7 @@ export function Navbar() {
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
-                className={`relative px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
+                className={`relative px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
                   isActive
                     ? "text-slate-950 dark:text-white font-semibold"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-800/50"
@@ -102,9 +103,9 @@ export function Navbar() {
         </nav>
 
         {/* Right Side Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden lg:flex items-center gap-2">
           {config.available && (
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50/90 dark:bg-emerald-950/60 rounded-full border border-emerald-200/80 dark:border-emerald-800/80 shadow-2xs">
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50/90 dark:bg-emerald-950/60 rounded-full border border-emerald-200/80 dark:border-emerald-800/80 shadow-2xs">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
@@ -141,7 +142,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile controls (Theme Toggle + Hamburger) */}
-        <div className="flex items-center gap-1.5 md:hidden">
+        <div className="flex items-center gap-1.5 lg:hidden">
           <ThemeToggle />
           <button
             className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
@@ -166,7 +167,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="md:hidden mt-2 p-4 rounded-2xl glass-panel shadow-lg border border-slate-200/90 dark:border-slate-800 max-w-[1140px] mx-auto bg-white/95 dark:bg-slate-900/95"
+            className="lg:hidden mt-2 p-4 rounded-2xl glass-panel shadow-lg border border-slate-200/90 dark:border-slate-800 max-w-[1140px] mx-auto bg-white/95 dark:bg-slate-900/95"
           >
             {config.available && (
               <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/60 rounded-full border border-emerald-200 dark:border-emerald-800/80 w-fit mb-3">

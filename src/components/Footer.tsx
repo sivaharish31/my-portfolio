@@ -13,6 +13,7 @@ const NAV_SHORTCUTS = [
   { label: "Projects", href: "projects" },
   { label: "Open Source", href: "opensource" },
   { label: "Problem Solving", href: "competitive" },
+  { label: "Certifications", href: "certifications" },
   { label: "Contact", href: "contact" },
 ];
 

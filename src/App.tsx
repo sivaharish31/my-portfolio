@@ -5,6 +5,7 @@ import { Skills } from "./components/Skills";
 import { Projects } from "./components/Projects";
 import { OpenSource } from "./components/OpenSource";
 import { CompetitiveProgramming } from "./components/CompetitiveProgramming";
+import { Certifications } from "./components/Certifications";
 import { GitHubActivity } from "./components/GitHubActivity";
 import { UnifiedDeveloperIdentity } from "./components/UnifiedDeveloperIdentity";
 import { Interests } from "./components/Interests";
@@ -16,16 +17,23 @@ import { CursorSpotlight } from "./components/CursorSpotlight";
 function App() {
   return (
     <>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:font-semibold focus:rounded-xl focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+      >
+        Skip to main content
+      </a>
       <ScrollProgress />
       <CursorSpotlight />
       <Navbar />
-      <main>
+      <main id="main-content" tabIndex={-1} className="outline-none">
         <Hero />
         <About />
         <Skills />
         <Projects />
         <OpenSource />
         <CompetitiveProgramming />
+        <Certifications />
         <GitHubActivity />
         <UnifiedDeveloperIdentity />
         <Interests />
