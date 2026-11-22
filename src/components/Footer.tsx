@@ -22,7 +22,7 @@ const CURRENT_YEAR = new Date().getFullYear();
 export function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-800" role="contentinfo">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-14 min-w-0">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-10 sm:py-12 min-w-0">
         <div className="grid sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 min-w-0">
           
           {/* Brand Info (5 cols) */}

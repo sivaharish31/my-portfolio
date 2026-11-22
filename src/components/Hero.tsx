@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, Mail, ChevronRight, Terminal, ShieldCheck, Flame } from "lucide-react";
-import { GitHubIcon, LinkedInIcon, CodolioIcon } from "./icons";
+import { GitHubIcon, LinkedInIcon, CodolioIcon, TechnologyIcon } from "./icons";
 import { config } from "../data/portfolio";
 
 function scrollTo(id: string) {
@@ -14,7 +14,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-[92vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-white dark:from-slate-950 dark:via-slate-900/60 dark:to-slate-950 pt-24 pb-12 md:py-20"
+      className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-gradient-to-b from-white via-slate-50/60 to-white dark:from-slate-950 dark:via-slate-900/60 dark:to-slate-950 pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-14 md:pb-16"
       aria-label="Introduction"
     >
       {/* Background Atmosphere & Radial Glows */}
@@ -270,13 +270,16 @@ export function Hero() {
                   <span>Real Code · Verified in Production</span>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <span className="px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800 font-semibold">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-blue-950 text-blue-300 border border-blue-800 font-semibold">
+                    <TechnologyIcon name="Java" className="w-3 h-3" />
                     Java 21
                   </span>
-                  <span className="px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-300 border border-indigo-800 font-semibold">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-950 text-indigo-300 border border-indigo-800 font-semibold">
+                    <TechnologyIcon name="Spring Boot" className="w-3 h-3" />
                     Spring Boot
                   </span>
-                  <span className="px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 font-semibold">
+                  <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 text-emerald-300 border border-emerald-800 font-semibold">
+                    <TechnologyIcon name="MySQL" className="w-3 h-3" />
                     MySQL
                   </span>
                 </div>

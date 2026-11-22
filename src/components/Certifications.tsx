@@ -1,20 +1,20 @@
 import { useRef } from "react";
 import { motion, useInView } from "motion/react";
 import { Award, CheckCircle2, Cloud, GraduationCap } from "lucide-react";
-import { OracleIcon, AWSIcon, NPTELIcon, INIIcon } from "./icons";
+import { OracleIcon, AWSAcademyIcon, NPTELIcon, INIIcon } from "./icons";
 import { certifications, type Certification } from "../data/portfolio";
 
 function getIssuerIcon(cert: Certification) {
   if (cert.isAws) {
-    return <AWSIcon className="w-5 h-5 text-[#FF9900]" />;
+    return <AWSAcademyIcon className="w-5 h-5" />;
   }
   if (cert.issuer === "Oracle") {
     return <OracleIcon className="w-5 h-5" />;
   }
   if (cert.issuer === "NPTEL") {
-    return <NPTELIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />;
+    return <NPTELIcon className="w-5 h-5" />;
   }
-  return <INIIcon className="w-5 h-5 text-sky-600 dark:text-sky-400" />;
+  return <INIIcon className="w-5 h-5" />;
 }
 
 function CertificationCard({
@@ -135,7 +135,7 @@ export function Certifications() {
     <section
       id="certifications"
       ref={ref}
-      className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/80"
+      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="certifications-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">

@@ -42,38 +42,36 @@ export function Navbar() {
   }, [menuOpen]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-3 sm:px-6 pt-3 sm:pt-3.5">
+    <motion.header
+      initial={{ y: -24, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 pt-3 sm:pt-3.5 transition-all duration-300"
+    >
       <div
-        className={`max-w-[1140px] mx-auto h-[58px] sm:h-[60px] px-3.5 sm:px-6 rounded-2xl flex items-center justify-between transition-all duration-300 ${
+        className={`max-w-[1140px] mx-auto h-[54px] sm:h-[58px] px-3.5 sm:px-5 rounded-2xl flex items-center justify-between transition-all duration-300 ${
           scrolled
-            ? "glass-panel shadow-sm border border-slate-200/90 dark:border-slate-800/90 dark:bg-slate-900/80"
+            ? "glass-panel shadow-sm border border-slate-200/90 dark:border-slate-800/90 dark:bg-slate-900/85 backdrop-blur-md"
             : "bg-white/70 dark:bg-slate-950/70 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/60"
         }`}
       >
-        {/* Logo / Monogram */}
+        {/* Monogram Brand Mark — clean and minimal, without text clutter */}
         <motion.button
           onClick={() => scrollTo("hero")}
-          className="flex items-center gap-2 sm:gap-2.5 group text-left cursor-pointer flex-shrink-0"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="flex items-center group cursor-pointer flex-shrink-0"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          aria-label="Sivaharish Home"
         >
-          <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 dark:from-blue-600 dark:to-indigo-600 flex items-center justify-center shadow-xs overflow-hidden group-hover:shadow-blue-500/20 group-hover:shadow-md transition-shadow">
-            <span className="text-white text-xs font-bold tracking-tight">SH</span>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-white tracking-tight leading-none">
-              Sivaharish
-            </span>
-            <span className="text-[9px] sm:text-[10px] text-slate-600 dark:text-slate-400 font-mono tracking-tight mt-0.5">
-              CSE · 2029
-            </span>
+          <div className="relative w-8 h-8 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 dark:from-blue-600 dark:to-indigo-600 flex items-center justify-center shadow-xs border border-slate-700/20 dark:border-blue-400/20 overflow-hidden group-hover:shadow-blue-500/25 group-hover:shadow-md transition-all">
+            <span className="text-white text-xs font-extrabold tracking-tight">SH</span>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
           </div>
         </motion.button>
 
         {/* Desktop Nav Items */}
         <nav
-          className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/70 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800"
+          className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/70 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800 backdrop-blur-sm"
           role="navigation"
           aria-label="Main navigation"
         >
@@ -86,14 +84,14 @@ export function Navbar() {
                 className={`relative px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
                   isActive
                     ? "text-slate-950 dark:text-white font-semibold"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-800/50"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-white/40 dark:hover:bg-slate-800/40"
                 }`}
               >
                 {isActive && (
                   <motion.span
                     layoutId="nav-active-pill"
                     className="absolute inset-0 bg-white dark:bg-slate-800 rounded-lg shadow-xs border border-slate-200/70 dark:border-slate-700/80"
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
                   />
                 )}
                 <span className="relative z-10">{item.label}</span>
@@ -167,12 +165,12 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="lg:hidden mt-2 p-4 rounded-2xl glass-panel shadow-lg border border-slate-200/90 dark:border-slate-800 max-w-[1140px] mx-auto bg-white/95 dark:bg-slate-900/95"
+            className="lg:hidden mt-2 p-3.5 rounded-2xl glass-panel shadow-lg border border-slate-200/90 dark:border-slate-800 max-w-[1140px] mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md"
           >
             {config.available && (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/60 rounded-full border border-emerald-200 dark:border-emerald-800/80 w-fit mb-3">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 dark:bg-emerald-950/60 rounded-full border border-emerald-200 dark:border-emerald-800/80 w-fit mb-2.5">
                 <Circle className="w-2 h-2 fill-emerald-500 text-emerald-500" />
-                <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+                <span className="text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
                   {config.availabilityText}
                 </span>
               </div>
@@ -183,12 +181,12 @@ export function Navbar() {
                   key={item.href}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 }}
+                  transition={{ delay: i * 0.03 }}
                   onClick={() => {
                     scrollTo(item.href);
                     setMenuOpen(false);
                   }}
-                  className={`block w-full text-left px-3.5 py-2.5 text-sm font-medium rounded-xl transition-colors ${
+                  className={`block w-full text-left px-3 py-2 text-xs font-medium rounded-xl transition-colors cursor-pointer ${
                     activeSection === item.href
                       ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs font-semibold"
                       : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80"
@@ -199,24 +197,24 @@ export function Navbar() {
               ))}
             </div>
 
-            <div className="pt-3 mt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-1">
+            <div className="pt-2.5 mt-2.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-1">
               <div className="flex items-center gap-3">
                 <a
                   href={config.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1.5"
+                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1"
                 >
-                  <GitHubIcon className="w-4 h-4" />
+                  <GitHubIcon className="w-3.5 h-3.5" />
                   GitHub
                 </a>
                 <a
                   href={config.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1.5"
+                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1"
                 >
-                  <LinkedInIcon className="w-4 h-4" />
+                  <LinkedInIcon className="w-3.5 h-3.5" />
                   LinkedIn
                 </a>
               </div>
@@ -226,6 +224,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 }

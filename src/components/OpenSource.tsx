@@ -236,12 +236,12 @@ export function OpenSource() {
   return (
     <section
       id="opensource"
-      className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
+      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="oss-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

@@ -32,12 +32,12 @@ export function UnifiedDeveloperIdentity() {
     <section
       id="ecosystem"
       ref={ref}
-      className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
+      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="identity-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
-        <div className="max-w-2xl mb-14">
+        <div className="max-w-2xl mb-8">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}

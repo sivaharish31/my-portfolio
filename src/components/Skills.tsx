@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Code2, Cpu, Layout, Database, Wrench, Sparkles } from "lucide-react";
+import { TechnologyIcon } from "./icons";
 import { skillCategories } from "../data/portfolio";
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -58,7 +59,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
+      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="skills-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
@@ -69,7 +70,7 @@ export function Skills() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55 }}
-          className="max-w-2xl mb-10"
+          className="max-w-2xl mb-8"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/70 uppercase mb-3">
             <Cpu className="w-3.5 h-3.5" />
@@ -132,7 +133,7 @@ export function Skills() {
               return (
                 <div
                   key={category.title}
-                  className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-md transition-all flex flex-col justify-between group min-w-0"
+                  className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-md transition-all flex flex-col justify-between group min-w-0 h-full"
                 >
                   <div>
                     {/* Header */}
@@ -145,13 +146,14 @@ export function Skills() {
                       </h3>
                     </div>
 
-                    {/* Skill Pills */}
+                    {/* Skill Pills with Authentic Technology Logos */}
                     <div className="flex flex-wrap gap-2">
                       {category.items.map((skill) => (
                         <div
                           key={skill.name}
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border ${style.bg} ${style.text} ${style.border} shadow-2xs hover:scale-[1.02] transition-transform`}
                         >
+                          <TechnologyIcon name={skill.name} className="w-3.5 h-3.5 shrink-0" />
                           <span>{skill.name}</span>
                           {skill.level && (
                             <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white dark:bg-slate-900 border border-black/10 dark:border-white/10 text-slate-600 dark:text-slate-300 font-bold">

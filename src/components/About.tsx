@@ -13,7 +13,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-y border-slate-200/60 dark:border-slate-800/80"
+      className="py-14 sm:py-16 md:py-20 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-y border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="about-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
@@ -24,7 +24,7 @@ export function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55 }}
-          className="mb-12 min-w-0"
+          className="mb-8 sm:mb-10 min-w-0"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/70 uppercase mb-3">
             <Compass className="w-3.5 h-3.5" />
