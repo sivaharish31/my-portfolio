@@ -125,34 +125,55 @@ export interface MonthLabel {
   weekIndex: number;
 }
 
-export interface RollingThreeMonthData {
+export type TimeRange = "3m" | "6m" | "12m";
+
+export interface RollingContributionData {
   totalContributions: number;
   weeks: ContributionWeek[];
   monthLabels: MonthLabel[];
   startDate: string;
   endDate: string;
+  range: TimeRange;
+  offsetWeeks: number;
+  canGoNext: boolean;
+  canGoPrev: boolean;
 }
 
+// Backwards-compatibility alias
+export type RollingThreeMonthData = RollingContributionData;
+
 /**
- * Processes raw contribution days into a rolling 3-month (90 days) weekly grid.
- * Returns null if data is empty or invalid.
+ * Processes raw contribution days into an interactive rolling weekly grid.
+ * Supports rolling 3-month (13 weeks), 6-month (26 weeks), and 12-month (52 weeks) views
+ * with pagination offset controls.
  */
-export function processContributions(
-  days: ContributionDay[]
-): RollingThreeMonthData | null {
+export function processRollingContributions(
+  days: ContributionDay[],
+  range: TimeRange = "3m",
+  offsetWeeks = 0
+): RollingContributionData | null {
   if (!Array.isArray(days) || days.length === 0) {
     return null;
   }
 
-  const latestDateStr = days[days.length - 1]?.date;
-  if (!latestDateStr) return null;
+  // Weeks to display per range
+  const rangeWeeks = range === "3m" ? 13 : range === "6m" ? 26 : 52;
+  const daysInWindow = rangeWeeks * 7;
 
-  const latestDate = new Date(latestDateStr + "T00:00:00Z");
-  if (Number.isNaN(latestDate.getTime())) return null;
+  // Calculate the reference latest date with offset
+  const maxDayIndex = days.length - 1;
+  const offsetDays = Math.max(0, offsetWeeks * 7);
+  const targetEndIndex = Math.max(0, maxDayIndex - offsetDays);
 
-  // Rolling 3-month cutoff: 90 days prior to the latest available day
-  const cutoff = new Date(latestDate);
-  cutoff.setUTCDate(cutoff.getUTCDate() - 90);
+  const targetEndDateStr = days[targetEndIndex]?.date;
+  if (!targetEndDateStr) return null;
+
+  const targetEndDate = new Date(targetEndDateStr + "T00:00:00Z");
+  if (Number.isNaN(targetEndDate.getTime())) return null;
+
+  // Window start date: rangeWeeks prior
+  const cutoff = new Date(targetEndDate);
+  cutoff.setUTCDate(cutoff.getUTCDate() - (daysInWindow - 7));
 
   // Align start date to the preceding Sunday for clean calendar grid layout
   const startDate = new Date(cutoff);
@@ -160,7 +181,7 @@ export function processContributions(
 
   const filtered = days.filter((d) => {
     const dDate = new Date(d.date + "T00:00:00Z");
-    return dDate >= startDate && dDate <= latestDate;
+    return dDate >= startDate && dDate <= targetEndDate;
   });
 
   if (filtered.length === 0) {
@@ -200,24 +221,41 @@ export function processContributions(
 
   const totalContributions = filtered.reduce((sum, d) => sum + d.count, 0);
 
+  const canGoNext = offsetWeeks > 0;
+  // Can go previous if there are days prior to filtered[0]
+  const firstFilteredDate = new Date(filtered[0].date + "T00:00:00Z");
+  const earliestAvailableDate = new Date(days[0].date + "T00:00:00Z");
+  const canGoPrev = firstFilteredDate.getTime() > earliestAvailableDate.getTime() + (7 * 24 * 60 * 60 * 1000);
+
   return {
     totalContributions,
     weeks,
     monthLabels,
     startDate: filtered[0].date,
     endDate: filtered[filtered.length - 1].date,
+    range,
+    offsetWeeks,
+    canGoNext,
+    canGoPrev,
   };
 }
 
 /**
- * Fetches rolling 3-month GitHub contribution data from the contributions API.
- * Returns null if the request fails, times out, or returns invalid data.
- * No hardcoded or fabricated fallback data is ever returned.
+ * Backward-compatible helper for 3-month processing.
  */
-export async function fetchThreeMonthContributions(
+export function processContributions(
+  days: ContributionDay[]
+): RollingContributionData | null {
+  return processRollingContributions(days, "3m", 0);
+}
+
+/**
+ * Fetches raw GitHub contribution days from the public contributions service.
+ */
+export async function fetchRawContributions(
   username: string,
   externalSignal?: AbortSignal
-): Promise<RollingThreeMonthData | null> {
+): Promise<ContributionDay[] | null> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 4000);
 
@@ -240,7 +278,7 @@ export async function fetchThreeMonthContributions(
 
     const data = await response.json();
     if (Array.isArray(data?.contributions) && data.contributions.length > 0) {
-      return processContributions(data.contributions);
+      return data.contributions;
     }
 
     return null;
@@ -252,4 +290,16 @@ export async function fetchThreeMonthContributions(
       externalSignal.removeEventListener("abort", onAbort);
     }
   }
+}
+
+/**
+ * Fetches rolling GitHub contribution data from the contributions API.
+ */
+export async function fetchThreeMonthContributions(
+  username: string,
+  externalSignal?: AbortSignal
+): Promise<RollingContributionData | null> {
+  const days = await fetchRawContributions(username, externalSignal);
+  if (!days) return null;
+  return processContributions(days);
 }

@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
+  RefreshCw,
 } from "lucide-react";
 import {
   LeetCodeIcon,
@@ -17,7 +18,13 @@ import {
   CodeChefIcon,
 } from "./icons";
 import { competitiveProfiles, type CPPlatform } from "../data/portfolio";
-import { fetchCodeforcesStats, type CodeforcesProfile } from "../services/competitiveProgramming";
+import {
+  loadCPStats,
+  getCachedCPBundle,
+  type CPDataBundle,
+  DEFAULT_CF_BASELINE,
+  DEFAULT_LC_BASELINE,
+} from "../services/competitiveProgramming";
 
 const platformIcons: Record<string, React.ReactNode> = {
   leetcode: <LeetCodeIcon className="w-5 h-5" />,
@@ -26,15 +33,34 @@ const platformIcons: Record<string, React.ReactNode> = {
   codechef: <CodeChefIcon className="w-5 h-5" />,
 };
 
-function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: CodeforcesProfile | null }) {
+function PlatformCard({
+  platform,
+  bundle,
+}: {
+  platform: CPPlatform;
+  bundle: CPDataBundle | null;
+}) {
   const isCf = platform.id === "codeforces";
-  const displayRating = isCf && liveCf?.rating ? liveCf.rating : platform.stats.find(s => s.label.includes("Rating"))?.value;
-  const displayRank = isCf && liveCf?.rank ? liveCf.rank : platform.stats.find(s => s.label.includes("Rank") || s.label.includes("Rating"))?.subtext;
+  const isLc = platform.id === "leetcode";
+
+  // Dynamic values based on 5-hour cached bundle
+  const cfRating = bundle?.codeforces.rating ?? DEFAULT_CF_BASELINE.rating;
+  const cfRank = bundle?.codeforces.rank
+    ? bundle.codeforces.rank.charAt(0).toUpperCase() + bundle.codeforces.rank.slice(1)
+    : "Newbie";
+
+  const lcSolved = bundle?.leetcode.totalSolved ?? DEFAULT_LC_BASELINE.totalSolved;
+  const lcRank = bundle?.leetcode.ranking ?? DEFAULT_LC_BASELINE.ranking;
+  const lcEasy = bundle?.leetcode.easySolved ?? DEFAULT_LC_BASELINE.easySolved;
+  const lcMed = bundle?.leetcode.mediumSolved ?? DEFAULT_LC_BASELINE.mediumSolved;
+  const lcHard = bundle?.leetcode.hardSolved ?? DEFAULT_LC_BASELINE.hardSolved;
+
+  const totalLcQuestions = lcSolved > 0 ? lcSolved : 187;
+  const easyPct = Math.round((lcEasy / totalLcQuestions) * 100);
+  const medPct = Math.round((lcMed / totalLcQuestions) * 100);
 
   return (
-    <div
-      className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0"
-    >
+    <div className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0">
       {/* Top ambient lighting tint */}
       <div
         className={`absolute top-0 right-0 w-44 h-44 bg-gradient-to-br ${platform.bgGradient} blur-2xl pointer-events-none opacity-60 dark:opacity-40 group-hover:opacity-100 transition-opacity`}
@@ -57,9 +83,18 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
             </div>
           </div>
 
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-700">
-            Verified
-          </span>
+          <div className="flex items-center gap-1.5">
+            {((isCf && bundle?.codeforces.isLive) || (isLc && bundle?.leetcode.isLive)) ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800/70">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Live 5h Sync
+              </span>
+            ) : (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-700">
+                Verified
+              </span>
+            )}
+          </div>
         </div>
 
         <p className="text-xs text-slate-600 dark:text-slate-300 mt-3 mb-4 leading-relaxed">
@@ -69,8 +104,19 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
         {/* Stats Grid */}
         <div className="grid grid-cols-3 gap-2 mb-4">
           {platform.stats.map((stat, i) => {
-            const val = (isCf && stat.label.includes("Current Rating")) ? displayRating : stat.value;
-            const sub = (isCf && stat.label.includes("Current Rating")) ? displayRank : stat.subtext;
+            let val = stat.value;
+            let sub = stat.subtext;
+
+            if (isCf && stat.label.includes("Current Rating")) {
+              val = cfRating;
+              sub = cfRank;
+            } else if (isCf && stat.label.includes("Max Rating")) {
+              val = bundle?.codeforces.maxRating ?? cfRating;
+            } else if (isLc && stat.label.includes("Total Solved")) {
+              val = lcSolved;
+            } else if (isLc && stat.label.includes("Global Rank")) {
+              val = lcRank;
+            }
 
             return (
               <div
@@ -94,39 +140,53 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
         </div>
 
         {/* Custom Visual Widget for LeetCode */}
-        {platform.breakdown && (
+        {isLc && (
           <div className="mb-4 p-3 rounded-xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-900/40">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5">
               <span className="flex items-center gap-1.5">
                 <Code2 className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 Problem Breakdown
               </span>
-              <span className="text-[11px] font-mono font-bold text-slate-700 dark:text-slate-300">180 Solved</span>
+              <span className="text-[11px] font-mono font-bold text-slate-700 dark:text-slate-300">
+                {lcSolved} Solved
+              </span>
             </div>
 
             <div className="h-2 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden flex">
               <div
                 className="bg-emerald-500 h-full"
-                style={{ width: "82%" }}
-                title="148 Easy Solved"
+                style={{ width: `${easyPct}%` }}
+                title={`${lcEasy} Easy Solved (${easyPct}%)`}
               />
               <div
                 className="bg-amber-500 h-full"
-                style={{ width: "18%" }}
-                title="32 Medium Solved"
+                style={{ width: `${medPct}%` }}
+                title={`${lcMed} Medium Solved (${medPct}%)`}
               />
+              {lcHard > 0 && (
+                <div
+                  className="bg-red-500 h-full flex-1"
+                  title={`${lcHard} Hard Solved`}
+                />
+              )}
             </div>
 
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-600 dark:text-slate-400 mt-1.5">
-              <span>Easy: <strong className="text-slate-800 dark:text-slate-200">{platform.breakdown.easy}</strong></span>
-              <span>Medium: <strong className="text-slate-800 dark:text-slate-200">{platform.breakdown.medium}</strong></span>
-              <span className="text-slate-600 dark:text-slate-400">Hard: 0</span>
+              <span>
+                Easy: <strong className="text-slate-800 dark:text-slate-200">{lcEasy}</strong>
+              </span>
+              <span>
+                Medium: <strong className="text-slate-800 dark:text-slate-200">{lcMed}</strong>
+              </span>
+              <span>
+                Hard: <strong className="text-slate-800 dark:text-slate-200">{lcHard}</strong>
+              </span>
             </div>
           </div>
         )}
 
         {/* Custom Visual Widget for Codeforces */}
-        {platform.ratingHistory && (
+        {isCf && (
           <div className="mb-4 p-3 rounded-xl bg-blue-50/50 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-800 dark:text-slate-200 mb-1.5">
               <span className="flex items-center gap-1.5">
@@ -134,12 +194,12 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
                 Rating Progression
               </span>
               <span className="text-[11px] font-mono text-blue-700 dark:text-blue-300 font-bold">
-                0 → 810
+                367 → {cfRating}
               </span>
             </div>
 
             <div className="space-y-1">
-              {platform.ratingHistory.map((item, idx) => (
+              {platform.ratingHistory?.map((item, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between text-[10px] text-slate-600 dark:text-slate-400 py-0.5 border-b border-blue-100/50 dark:border-blue-900/30 last:border-none"
@@ -163,11 +223,11 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
               <Trophy className="w-4 h-4 text-amber-700 dark:text-amber-400" />
               <div>
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Peak Contest Rating</p>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400">CodeChef Division 4</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400">CodeChef Division 4 · 145 Solved</p>
               </div>
             </div>
             <span className="text-sm font-extrabold font-mono text-amber-900 dark:text-amber-300 bg-white dark:bg-slate-800 px-2.5 py-1 rounded-xl border border-amber-200 dark:border-amber-800/60">
-              1409 Peak
+              1259 Peak
             </span>
           </div>
         )}
@@ -179,11 +239,11 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
               <Activity className="w-4 h-4 text-slate-700 dark:text-slate-300" />
               <div>
                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">AtCoder Beginner Contests</p>
-                <p className="text-[11px] text-slate-600 dark:text-slate-400">3 Rated Rounds Competed</p>
+                <p className="text-[11px] text-slate-600 dark:text-slate-400">4 Rated Rounds (ABC 482-485)</p>
               </div>
             </div>
             <span className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-700">
-              14 Kyu
+              32 Rating
             </span>
           </div>
         )}
@@ -193,7 +253,7 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
       <div className="pt-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between mt-2">
         <span className="text-[11px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1">
           <Clock className="w-3 h-3" />
-          {platform.lastVerified}
+          {bundle?.lastSyncFormatted ? `Sync: ${bundle.lastSyncFormatted}` : platform.lastVerified}
         </span>
 
         <motion.a
@@ -213,13 +273,36 @@ function PlatformCard({ platform, liveCf }: { platform: CPPlatform; liveCf: Code
 }
 
 export function CompetitiveProgramming() {
-  const [liveCf, setLiveCf] = useState<CodeforcesProfile | null>(null);
+  const [bundle, setBundle] = useState<CPDataBundle | null>(() => getCachedCPBundle());
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    fetchCodeforcesStats("sivaharish").then((data) => {
-      if (data) setLiveCf(data);
+    let isSubscribed = true;
+    loadCPStats(false).then((data) => {
+      if (isSubscribed) {
+        setBundle(data);
+      }
+    }).catch(() => {
+      // Keep existing bundle
     });
+
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
+
+  const handleManualSync = () => {
+    setIsRefreshing(true);
+    loadCPStats(true)
+      .then((data) => {
+        setBundle(data);
+      })
+      .finally(() => {
+        setIsRefreshing(false);
+      });
+  };
+
+  const totalProblemsSolved = (bundle?.leetcode.totalSolved ?? 187) + 145 + 25;
 
   return (
     <section
@@ -228,7 +311,6 @@ export function CompetitiveProgramming() {
       aria-labelledby="cp-heading"
     >
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
-        
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -268,10 +350,10 @@ export function CompetitiveProgramming() {
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              335+
+              {totalProblemsSolved}+
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-              LeetCode (180), CodeChef (135), Codeforces (20)
+              LeetCode ({bundle?.leetcode.totalSolved ?? 187}), CodeChef (145), Codeforces (25)
             </p>
           </div>
 
@@ -281,10 +363,10 @@ export function CompetitiveProgramming() {
               <Trophy className="w-4 h-4 text-amber-500" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              1409
+              1259
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-              CodeChef Division 4 · Codeforces 810
+              CodeChef Division 4 · Codeforces {bundle?.codeforces.rating ?? 1015}
             </p>
           </div>
 
@@ -321,18 +403,34 @@ export function CompetitiveProgramming() {
             <PlatformCard
               key={platform.id}
               platform={platform}
-              liveCf={liveCf}
+              bundle={bundle}
             />
           ))}
         </div>
 
-        {/* Verification Footer Banner */}
-        <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 font-mono flex flex-wrap items-center justify-center gap-2">
-          <span>✓ All metrics verified directly from public profiles</span>
-          <span>·</span>
-          <span>Last verification: November 2026</span>
-          <span>·</span>
-          <span>Real-time Codeforces sync active</span>
+        {/* Verification & 5-Hour Sync Banner */}
+        <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 font-mono flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span>✓ Verified public profile metrics</span>
+            <span>·</span>
+            <span>5-hour auto-refresh cache active</span>
+            {bundle?.lastSyncFormatted && (
+              <>
+                <span>·</span>
+                <span>Last sync: {bundle.lastSyncFormatted}</span>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={handleManualSync}
+            disabled={isRefreshing}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+            title="Refresh competitive programming metrics now"
+          >
+            <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin text-blue-500" : ""}`} />
+            <span>{isRefreshing ? "Syncing..." : "Sync Now"}</span>
+          </button>
         </div>
       </div>
     </section>
