@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion } from "motion/react";
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "motion/react";
 import {
   ExternalLink,
   Trophy,
@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Clock,
   Sparkles,
-  RefreshCw,
 } from "lucide-react";
 import {
   LeetCodeIcon,
@@ -25,6 +24,45 @@ import {
   DEFAULT_CF_BASELINE,
   DEFAULT_LC_BASELINE,
 } from "../services/competitiveProgramming";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useGitHubSnapshot } from "../hooks/useGitHubSnapshot";
+import type { MultiPlatformSnapshot, PlatformSyncStatus } from "../services/github";
+import { gsap } from "../lib/animations";
+import { MaskedHeading, SpotlightCard, SectionWatermark } from "./MotionPrimitives";
+
+function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
+  const [animatedValue, setAnimatedValue] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true });
+  const prefersReduced = useReducedMotion();
+
+  useEffect(() => {
+    if (prefersReduced || !isInView) return;
+
+    const obj = { val: 0 };
+    const tween = gsap.to(obj, {
+      val: value,
+      duration: 1.4,
+      ease: "power2.out",
+      onUpdate: () => {
+        setAnimatedValue(Math.round(obj.val));
+      },
+    });
+
+    return () => {
+      tween.kill();
+    };
+  }, [isInView, value, prefersReduced]);
+
+  const display = prefersReduced ? value : animatedValue;
+
+  return (
+    <span ref={ref}>
+      {display}
+      {suffix}
+    </span>
+  );
+}
 
 const platformIcons: Record<string, React.ReactNode> = {
   leetcode: <LeetCodeIcon className="w-5 h-5" />,
@@ -36,31 +74,63 @@ const platformIcons: Record<string, React.ReactNode> = {
 function PlatformCard({
   platform,
   bundle,
+  multiPlatform,
 }: {
   platform: CPPlatform;
   bundle: CPDataBundle | null;
+  multiPlatform: MultiPlatformSnapshot | null;
 }) {
   const isCf = platform.id === "codeforces";
   const isLc = platform.id === "leetcode";
+  const isCc = platform.id === "codechef";
+  const isAc = platform.id === "atcoder";
 
-  // Dynamic values based on 5-hour cached bundle
-  const cfRating = bundle?.codeforces.rating ?? DEFAULT_CF_BASELINE.rating;
-  const cfRank = bundle?.codeforces.rank
-    ? bundle.codeforces.rank.charAt(0).toUpperCase() + bundle.codeforces.rank.slice(1)
-    : "Newbie";
+  const mpEntry = multiPlatform?.platforms?.[platform.id];
+  const mpStatus: PlatformSyncStatus | null = mpEntry?.status ?? null;
 
-  const lcSolved = bundle?.leetcode.totalSolved ?? DEFAULT_LC_BASELINE.totalSolved;
-  const lcRank = bundle?.leetcode.ranking ?? DEFAULT_LC_BASELINE.ranking;
-  const lcEasy = bundle?.leetcode.easySolved ?? DEFAULT_LC_BASELINE.easySolved;
-  const lcMed = bundle?.leetcode.mediumSolved ?? DEFAULT_LC_BASELINE.mediumSolved;
-  const lcHard = bundle?.leetcode.hardSolved ?? DEFAULT_LC_BASELINE.hardSolved;
+  // Prefer 30-minute multi-platform snapshot if valid; fallback to 5-hour CP bundle / verified baseline
+  const cfData = multiPlatform?.platforms?.codeforces?.data;
+  const lcData = multiPlatform?.platforms?.leetcode?.data;
+  const ccData = multiPlatform?.platforms?.codechef?.data;
+  const acData = multiPlatform?.platforms?.atcoder?.data;
+
+  const cfRating = cfData?.rating ?? bundle?.codeforces.rating ?? DEFAULT_CF_BASELINE.rating;
+  const cfMaxRating = cfData?.maxRating ?? bundle?.codeforces.maxRating ?? cfRating;
+  const cfRankRaw = cfData?.rank ?? bundle?.codeforces.rank ?? "newbie";
+  const cfRank = cfRankRaw.charAt(0).toUpperCase() + cfRankRaw.slice(1);
+  const cfContests = cfData?.ratedContests ?? 4;
+
+  const lcSolved = lcData?.totalSolved ?? bundle?.leetcode.totalSolved ?? DEFAULT_LC_BASELINE.totalSolved;
+  const lcRank = lcData?.ranking
+    ? `#${lcData.ranking.toLocaleString()}`
+    : bundle?.leetcode.ranking ?? DEFAULT_LC_BASELINE.ranking;
+  const lcEasy = lcData?.easySolved ?? bundle?.leetcode.easySolved ?? DEFAULT_LC_BASELINE.easySolved;
+  const lcMed = lcData?.mediumSolved ?? bundle?.leetcode.mediumSolved ?? DEFAULT_LC_BASELINE.mediumSolved;
+  const lcHard = lcData?.hardSolved ?? bundle?.leetcode.hardSolved ?? DEFAULT_LC_BASELINE.hardSolved;
+
+  const ccRating = ccData?.rating ?? 1259;
+  const ccMaxRating = ccData?.maxRating ?? 1299;
+  const ccSolved = ccData?.totalSolved ?? 145;
+
+  const acRating = acData?.rating ?? 32;
+  const acHighest = acData?.highestRating ?? 32;
+  const acMatches = acData?.ratedMatches ?? 4;
 
   const totalLcQuestions = lcSolved > 0 ? lcSolved : 187;
   const easyPct = Math.round((lcEasy / totalLcQuestions) * 100);
   const medPct = Math.round((lcMed / totalLcQuestions) * 100);
 
   return (
-    <div className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0">
+    <SpotlightCard
+      spotlightColor="rgba(59, 130, 246, 0.14)"
+      tiltStrength={3.5}
+      className="rounded-3xl h-full"
+    >
+      <motion.div
+        whileHover={{ y: -4 }}
+        transition={{ duration: 0.2 }}
+        className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/85 border border-slate-200 dark:border-slate-800 hover:border-blue-300/80 dark:hover:border-blue-700/70 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0"
+      >
       {/* Top ambient lighting tint */}
       <div
         className={`absolute top-0 right-0 w-44 h-44 bg-gradient-to-br ${platform.bgGradient} blur-2xl pointer-events-none opacity-60 dark:opacity-40 group-hover:opacity-100 transition-opacity`}
@@ -84,10 +154,17 @@ function PlatformCard({
           </div>
 
           <div className="flex items-center gap-1.5">
-            {((isCf && bundle?.codeforces.isLive) || (isLc && bundle?.leetcode.isLive)) ? (
+            {mpStatus === "success" || (isCf && bundle?.codeforces.isLive) || (isLc && bundle?.leetcode.isLive) ? (
               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800/70">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live 5h Sync
+                {mpStatus === "success" ? "Synced 30m" : "Live Sync"}
+              </span>
+            ) : mpStatus === "partial" || mpStatus === "stale" ? (
+              <span
+                title={mpEntry?.error || "Showing last successful snapshot"}
+                className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-semibold border border-amber-200 dark:border-amber-800/70"
+              >
+                {mpStatus === "partial" ? "Partial" : "Stale"}
               </span>
             ) : (
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-700">
@@ -111,11 +188,25 @@ function PlatformCard({
               val = cfRating;
               sub = cfRank;
             } else if (isCf && stat.label.includes("Max Rating")) {
-              val = bundle?.codeforces.maxRating ?? cfRating;
+              val = cfMaxRating;
+            } else if (isCf && stat.label.includes("Rated Rounds")) {
+              val = cfContests;
             } else if (isLc && stat.label.includes("Total Solved")) {
               val = lcSolved;
             } else if (isLc && stat.label.includes("Global Rank")) {
               val = lcRank;
+            } else if (isCc && stat.label === "Rating") {
+              val = ccRating;
+            } else if (isCc && stat.label.includes("Highest Rating")) {
+              val = ccMaxRating;
+            } else if (isCc && stat.label.includes("Problems Solved")) {
+              val = ccSolved;
+            } else if (isAc && stat.label === "Rating") {
+              val = acRating;
+            } else if (isAc && stat.label.includes("Highest Rating")) {
+              val = acHighest;
+            } else if (isAc && stat.label.includes("Rated Matches")) {
+              val = acMatches;
             }
 
             return (
@@ -268,13 +359,14 @@ function PlatformCard({
           <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-white dark:group-hover:text-slate-950 transition-colors" />
         </motion.a>
       </div>
-    </div>
+    </motion.div>
+    </SpotlightCard>
   );
 }
 
 export function CompetitiveProgramming() {
   const [bundle, setBundle] = useState<CPDataBundle | null>(() => getCachedCPBundle());
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const { multiPlatform } = useGitHubSnapshot();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -291,18 +383,9 @@ export function CompetitiveProgramming() {
     };
   }, []);
 
-  const handleManualSync = () => {
-    setIsRefreshing(true);
-    loadCPStats(true)
-      .then((data) => {
-        setBundle(data);
-      })
-      .finally(() => {
-        setIsRefreshing(false);
-      });
-  };
-
-  const totalProblemsSolved = (bundle?.leetcode.totalSolved ?? 187) + 145 + 25;
+  const lcSolvedTotal = multiPlatform?.platforms?.leetcode?.data?.totalSolved ?? bundle?.leetcode.totalSolved ?? 187;
+  const ccSolvedTotal = multiPlatform?.platforms?.codechef?.data?.totalSolved ?? 145;
+  const totalProblemsSolved = lcSolvedTotal + ccSolvedTotal + 25;
 
   return (
     <section
@@ -310,6 +393,7 @@ export function CompetitiveProgramming() {
       className="py-14 sm:py-16 md:py-20 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="cp-heading"
     >
+      <SectionWatermark text="05 // PROBLEM SOLVING" align="right" direction="left" />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Section Header */}
         <motion.div
@@ -328,7 +412,7 @@ export function CompetitiveProgramming() {
             id="cp-heading"
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] mb-3"
           >
-            Algorithms, contests, & problem solving.
+            <MaskedHeading>Algorithms, contests, & problem solving.</MaskedHeading>
           </h2>
 
           <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">
@@ -344,46 +428,62 @@ export function CompetitiveProgramming() {
           transition={{ duration: 0.55, delay: 0.1 }}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-10 min-w-0"
         >
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0"
+          >
             <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Problems Solved</span>
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              {totalProblemsSolved}+
+              <AnimatedNumber value={totalProblemsSolved} suffix="+" />
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-              LeetCode ({bundle?.leetcode.totalSolved ?? 187}), CodeChef (145), Codeforces (25)
+              LeetCode ({lcSolvedTotal}), CodeChef ({ccSolvedTotal}), Codeforces (25)
             </p>
-          </div>
+          </motion.div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0"
+          >
             <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Peak Rating</span>
               <Trophy className="w-4 h-4 text-amber-500" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              1259
+              <AnimatedNumber value={multiPlatform?.platforms?.codechef?.data?.maxRating ?? 1299} />
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
-              CodeChef Division 4 · Codeforces {bundle?.codeforces.rating ?? 1015}
+              CodeChef Division 4 · Codeforces {multiPlatform?.platforms?.codeforces?.data?.rating ?? bundle?.codeforces.rating ?? 1015}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0"
+          >
             <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Active Platforms</span>
               <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
             <p className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              4
+              <AnimatedNumber value={4} />
             </p>
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               LeetCode · Codeforces · AtCoder · CodeChef
             </p>
-          </div>
+          </motion.div>
 
-          <div className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0">
+          <motion.div
+            whileHover={{ y: -3 }}
+            transition={{ duration: 0.2 }}
+            className="p-4 rounded-2xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 shadow-2xs min-w-0"
+          >
             <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 mb-1">
               <span className="text-[11px] font-bold uppercase tracking-wider">Primary Language</span>
               <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
@@ -394,7 +494,7 @@ export function CompetitiveProgramming() {
             <p className="text-[11px] text-slate-600 dark:text-slate-400 mt-0.5">
               Object-oriented design & algorithms
             </p>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* 4 Dashboard Platform Cards */}
@@ -404,33 +504,9 @@ export function CompetitiveProgramming() {
               key={platform.id}
               platform={platform}
               bundle={bundle}
+              multiPlatform={multiPlatform}
             />
           ))}
-        </div>
-
-        {/* Verification & 5-Hour Sync Banner */}
-        <div className="p-3.5 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400 font-mono flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span>✓ Verified public profile metrics</span>
-            <span>·</span>
-            <span>5-hour auto-refresh cache active</span>
-            {bundle?.lastSyncFormatted && (
-              <>
-                <span>·</span>
-                <span>Last sync: {bundle.lastSyncFormatted}</span>
-              </>
-            )}
-          </div>
-
-          <button
-            onClick={handleManualSync}
-            disabled={isRefreshing}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
-            title="Refresh competitive programming metrics now"
-          >
-            <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin text-blue-500" : ""}`} />
-            <span>{isRefreshing ? "Syncing..." : "Sync Now"}</span>
-          </button>
         </div>
       </div>
     </section>

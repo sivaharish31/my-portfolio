@@ -1,5 +1,5 @@
 import { Mail, ArrowUp } from "lucide-react";
-import { GitHubIcon, LinkedInIcon, CodolioIcon, OSCIIcon } from "./icons";
+import { GitHubIcon, LinkedInIcon, CodolioIcon } from "./icons";
 import { config } from "../data/portfolio";
 
 function scrollTo(id: string) {
@@ -94,15 +94,6 @@ export function Footer() {
               >
                 <CodolioIcon className="w-4 h-4 text-slate-400" />
                 Codolio · Sivaharish
-              </a>
-              <a
-                href={config.osci}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-400 hover:text-white transition-colors"
-              >
-                <OSCIIcon className="w-4 h-4 text-slate-400" />
-                OSCI Dashboard
               </a>
               <a
                 href={`mailto:${config.email}`}

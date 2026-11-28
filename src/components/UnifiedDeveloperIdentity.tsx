@@ -5,13 +5,13 @@ import {
   GitHubIcon,
   LinkedInIcon,
   CodolioIcon,
-  OSCIIcon,
   LeetCodeIcon,
   CodeforcesIcon,
   AtCoderIcon,
   CodeChefIcon,
 } from "./icons";
 import { unifiedDeveloperIdentity } from "../data/portfolio";
+import { MaskedHeading, SpotlightCard, SectionWatermark } from "./MotionPrimitives";
 
 const platformIconMap: Record<string, React.ReactNode> = {
   GitHub: <GitHubIcon className="w-5 h-5 text-slate-900 dark:text-white" />,
@@ -21,7 +21,6 @@ const platformIconMap: Record<string, React.ReactNode> = {
   AtCoder: <AtCoderIcon className="w-5 h-5" />,
   CodeChef: <CodeChefIcon className="w-5 h-5" />,
   Codolio: <CodolioIcon className="w-5 h-5 text-purple-600 dark:text-purple-400" />,
-  OSCI: <OSCIIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />,
 };
 
 export function UnifiedDeveloperIdentity() {
@@ -35,6 +34,7 @@ export function UnifiedDeveloperIdentity() {
       className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="identity-heading"
     >
+      <SectionWatermark text="08 // ECOSYSTEM" align="left" direction="right" />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="max-w-2xl mb-8">
@@ -50,15 +50,12 @@ export function UnifiedDeveloperIdentity() {
             </span>
           </motion.div>
 
-          <motion.h2
+          <h2
             id="identity-heading"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.1 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.15] mb-4"
           >
-            One developer. One connected identity.
-          </motion.h2>
+            <MaskedHeading>One developer. One connected identity.</MaskedHeading>
+          </h2>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -73,17 +70,22 @@ export function UnifiedDeveloperIdentity() {
         {/* 8-Platform Unified Matrix */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 min-w-0">
           {unifiedDeveloperIdentity.map((item, idx) => (
-            <motion.a
+            <SpotlightCard
               key={item.platform}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: idx * 0.05 + 0.2 }}
-              className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group flex flex-col justify-between min-w-0"
-              whileHover={{ y: -3 }}
+              spotlightColor="rgba(59, 130, 246, 0.12)"
+              tiltStrength={3.5}
+              className="rounded-2xl h-full"
             >
+              <motion.a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: idx * 0.05 + 0.2 }}
+                className="p-5 rounded-2xl bg-slate-50/75 border border-slate-200/80 hover:border-blue-300/70 hover:bg-white hover:shadow-lg dark:bg-slate-800/50 dark:border-slate-800 dark:hover:bg-slate-800/85 dark:hover:border-blue-700/60 transition-all group flex flex-col justify-between min-w-0 h-full"
+                whileHover={{ y: -4 }}
+              >
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 shadow-2xs border border-slate-200/60 dark:border-slate-700 group-hover:scale-105 transition-transform">
@@ -114,7 +116,8 @@ export function UnifiedDeveloperIdentity() {
                 <span>View Profile</span>
                 <ExternalLink className="w-3 h-3 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" />
               </div>
-            </motion.a>
+              </motion.a>
+            </SpotlightCard>
           ))}
         </div>
       </div>

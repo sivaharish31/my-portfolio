@@ -1,17 +1,26 @@
+import { useRef } from "react";
 import { motion } from "motion/react";
 import { CheckCircle2, Layers, Compass, ArrowUpRight, Clock, Bell, Radio, Database } from "lucide-react";
 import { GitHubIcon, TechnologyIcon } from "./icons";
 import { projects, type Project } from "../data/portfolio";
+import { useScrollReveal } from "../hooks/useScrollReveal";
+import { gsap } from "../lib/animations";
+import { MaskedHeading, SpotlightCard, Magnetic } from "./MotionPrimitives";
 
 function ContestCompassShowcase({ project }: { project: Project }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-lg overflow-hidden p-4 sm:p-8 lg:p-10 min-w-0 w-full"
+    <SpotlightCard
+      spotlightColor="rgba(59, 130, 246, 0.16)"
+      tiltStrength={3.5}
+      className="rounded-3xl"
     >
+      <motion.div
+        initial={{ opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="rounded-3xl border border-slate-200/90 dark:border-slate-800 hover:border-blue-300/80 dark:hover:border-blue-700/70 bg-white dark:bg-slate-900/90 shadow-lg hover:shadow-2xl overflow-hidden p-4 sm:p-8 lg:p-10 min-w-0 w-full transition-all duration-300"
+      >
       <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-start min-w-0 w-full">
         
         {/* Left Column: Project Details & Features (7 cols) */}
@@ -88,18 +97,20 @@ function ContestCompassShowcase({ project }: { project: Project }) {
 
           {/* Action Button */}
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
-            <motion.a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 text-sm font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer group"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <GitHubIcon className="w-4 h-4" />
-              <span>View Repository on GitHub</span>
-              <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </motion.a>
+            <Magnetic strength={0.22}>
+              <motion.a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-white dark:text-slate-950 dark:hover:bg-slate-100 text-sm font-semibold shadow-md hover:shadow-lg transition-all cursor-pointer group"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <GitHubIcon className="w-4 h-4" />
+                <span>View Repository on GitHub</span>
+                <ArrowUpRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </motion.a>
+            </Magnetic>
           </div>
         </div>
 
@@ -207,25 +218,56 @@ function ContestCompassShowcase({ project }: { project: Project }) {
 
       </div>
     </motion.div>
+    </SpotlightCard>
   );
 }
 
 export function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useScrollReveal(sectionRef, () => {
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
+      gsap.fromTo(
+        ".projects-watermark",
+        { x: 60 },
+        {
+          x: -60,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    });
+  });
+
   return (
     <section
       id="projects"
-      className="py-14 sm:py-16 md:py-20 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
+      ref={sectionRef}
+      className="py-16 sm:py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="projects-heading"
     >
+      {/* Editorial Parallax Watermark (Desktop) */}
+      <div
+        className="projects-watermark hidden lg:block absolute top-10 right-0 text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
+        aria-hidden="true"
+      >
+        03 // PROJECTS
+      </div>
+
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
-        
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.55 }}
-          className="max-w-2xl mb-8"
+          className="max-w-2xl mb-10"
         >
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/70 uppercase mb-3">
             <Compass className="w-3.5 h-3.5" />
@@ -236,7 +278,7 @@ export function Projects() {
             id="projects-heading"
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] mb-3"
           >
-            Things I've built.
+            <MaskedHeading>Things I've built.</MaskedHeading>
           </h2>
 
           <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed">

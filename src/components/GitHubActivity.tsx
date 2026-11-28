@@ -1,5 +1,5 @@
 import { motion, useInView } from "motion/react";
-import { useRef, useEffect, useState, useMemo } from "react";
+import { useRef, useState, useMemo } from "react";
 import {
   ExternalLink,
   BookOpen,
@@ -15,24 +15,23 @@ import {
 } from "lucide-react";
 import { GitHubIcon } from "./icons";
 import { config } from "../data/portfolio";
+import { SectionWatermark } from "./MotionPrimitives";
 import {
-  fetchGitHubUser,
-  fetchRawContributions,
   processRollingContributions,
-  type GitHubUser,
-  type ContributionDay,
   type RollingContributionData,
   type TimeRange,
   type MonthLabel,
 } from "../services/github";
+import { useGitHubSnapshot } from "../hooks/useGitHubSnapshot";
 
 function formatDisplayDate(dateStr: string) {
   const [y, m, d] = dateStr.split("-");
-  const date = new Date(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10));
+  const date = new Date(Date.UTC(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10)));
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -55,53 +54,20 @@ export function GitHubActivity() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const [user, setUser] = useState<GitHubUser | null>(null);
-  const [userLoading, setUserLoading] = useState(true);
-
-  // Raw days cache from API
-  const [rawDays, setRawDays] = useState<ContributionDay[] | null>(null);
-  const [contribState, setContribState] = useState<
-    "loading" | "success" | "error"
-  >("loading");
+  const { snapshot, loading, stale, refresh } = useGitHubSnapshot();
+  const user = snapshot?.profile ?? null;
+  const userLoading = loading && !user;
+  const rawDays = snapshot?.contributions?.days ?? null;
+  const contribState: "loading" | "success" | "error" =
+    rawDays && rawDays.length > 0 ? "success" : loading ? "loading" : "error";
 
   // Interactive controls state
   const [range, setRange] = useState<TimeRange>("3m");
   const [offsetWeeks, setOffsetWeeks] = useState(0);
 
-  const [retryTrigger, setRetryTrigger] = useState(0);
-
   const handleRetry = () => {
-    setContribState("loading");
-    setRetryTrigger((prev) => prev + 1);
+    refresh();
   };
-
-  useEffect(() => {
-    const userController = new AbortController();
-    fetchGitHubUser("sivaharish31", userController.signal).then((data) => {
-      if (userController.signal.aborted) return;
-      setUser(data);
-      setUserLoading(false);
-    });
-
-    const contribController = new AbortController();
-    fetchRawContributions("sivaharish31", contribController.signal).then(
-      (days) => {
-        if (contribController.signal.aborted) return;
-        if (days && days.length > 0) {
-          setRawDays(days);
-          setContribState("success");
-        } else {
-          setRawDays(null);
-          setContribState("error");
-        }
-      }
-    );
-
-    return () => {
-      userController.abort();
-      contribController.abort();
-    };
-  }, [retryTrigger]);
 
   // Derived processed data based on range and offsetWeeks
   const currentContributions = useMemo<RollingContributionData | null>(() => {
@@ -156,6 +122,7 @@ export function GitHubActivity() {
       className="py-14 sm:py-16 md:py-20 bg-slate-50/60 dark:bg-slate-950/60 border-t border-slate-200/60 dark:border-slate-800/80 relative overflow-hidden"
       aria-labelledby="github-heading"
     >
+      <SectionWatermark text="07 // GITHUB" align="right" direction="left" />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="max-w-xl mb-8 sm:mb-10">
@@ -324,19 +291,29 @@ export function GitHubActivity() {
 
                 {/* Range Pills (3M, 6M, 12M) */}
                 <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 text-xs font-mono">
-                  {(["3m", "6m", "12m"] as TimeRange[]).map((r) => (
-                    <button
-                      key={r}
-                      onClick={() => handleRangeChange(r)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                        range === r
-                          ? "bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-2xs"
-                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                      }`}
-                    >
-                      {r === "3m" ? "3M" : r === "6m" ? "6M" : "1Y"}
-                    </button>
-                  ))}
+                  {(["3m", "6m", "12m"] as TimeRange[]).map((r) => {
+                    const isSelected = range === r;
+                    return (
+                      <button
+                        key={r}
+                        onClick={() => handleRangeChange(r)}
+                        className={`relative px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                          isSelected
+                            ? "text-blue-600 dark:text-blue-400 font-bold"
+                            : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                        }`}
+                      >
+                        {isSelected && (
+                          <motion.span
+                            layoutId="gh-range-pill"
+                            className="absolute inset-0 bg-white dark:bg-slate-900 rounded-lg shadow-2xs"
+                            transition={{ type: "spring", stiffness: 450, damping: 32 }}
+                          />
+                        )}
+                        <span className="relative z-10">{r === "3m" ? "3M" : r === "6m" ? "6M" : "1Y"}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -347,10 +324,25 @@ export function GitHubActivity() {
                   <span className="font-semibold text-slate-800 dark:text-slate-200">
                     {offsetWeeks === 0 ? "Current Period" : "Previous Period"}
                   </span>
-                  {offsetWeeks === 0 && (
-                    <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800/70">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Latest
+                    {offsetWeeks === 0 && (
+                    <span
+                      className={`inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded font-semibold border ${
+                        stale
+                          ? "bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800/70"
+                          : "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/70"
+                      }`}
+                      title={
+                        snapshot?.syncedAt
+                          ? `Last synced: ${new Date(snapshot.syncedAt).toLocaleString()}`
+                          : undefined
+                      }
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          stale ? "bg-amber-500" : "bg-emerald-500 animate-pulse"
+                        }`}
+                      />
+                      {stale ? "Stale Cache" : "Latest"}
                     </span>
                   )}
                 </div>

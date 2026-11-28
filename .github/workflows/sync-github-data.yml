@@ -1,0 +1,55 @@
+name: Sync Portfolio Coding Profiles
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-portfolio-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Prepare portfolio-data branch worktree
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin portfolio-data >/dev/null 2>&1; then
+            git fetch origin portfolio-data:portfolio-data
+            git worktree add data-branch portfolio-data
+          else
+            git worktree add --orphan -b portfolio-data data-branch
+          fi
+
+      - name: Synchronize all 6 coding profiles
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/sync-portfolio-data.mjs \
+            --out data-branch/portfolio-snapshot.json \
+            --compare data-branch/portfolio-snapshot.json
+
+      - name: Commit and push only if snapshot changed
+        run: |
+          cd data-branch
+          if [ -n "$(git status --porcelain)" ]; then
+            git add portfolio-snapshot.json
+            git commit -m "chore(data): sync 6-platform snapshot [skip ci]"
+            git push origin portfolio-data
+          else
+            echo "No changes detected in portfolio snapshot; skipping commit and push."
+          fi

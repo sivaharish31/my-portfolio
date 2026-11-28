@@ -3,6 +3,7 @@ import { motion, useInView } from "motion/react";
 import { Award, CheckCircle2, Cloud, GraduationCap } from "lucide-react";
 import { OracleIcon, AWSAcademyIcon, NPTELIcon, INIIcon } from "./icons";
 import { certifications, type Certification } from "../data/portfolio";
+import { MaskedHeading, SpotlightCard, SectionWatermark } from "./MotionPrimitives";
 
 function getIssuerIcon(cert: Certification) {
   if (cert.isAws) {
@@ -30,12 +31,25 @@ function CertificationCard({
   const isOracle = cert.issuer === "Oracle";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
-      whileHover={{ y: -4 }}
-      className={`p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/80 border transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0 shadow-xs hover:shadow-lg ${
+    <SpotlightCard
+      spotlightColor={
+        cert.isAws
+          ? "rgba(245, 158, 11, 0.14)"
+          : isElite
+          ? "rgba(99, 102, 241, 0.14)"
+          : isOracle
+          ? "rgba(239, 68, 68, 0.14)"
+          : "rgba(59, 130, 246, 0.12)"
+      }
+      tiltStrength={3.5}
+      className="rounded-3xl h-full"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
+        whileHover={{ y: -4 }}
+        className={`p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900/85 border transition-all duration-300 flex flex-col justify-between h-full group relative overflow-hidden min-w-0 shadow-xs hover:shadow-xl ${
         cert.isAws
           ? "border-amber-200/90 dark:border-amber-900/50 hover:border-amber-300 dark:hover:border-amber-800"
           : isElite
@@ -124,6 +138,7 @@ function CertificationCard({
         </span>
       </div>
     </motion.div>
+    </SpotlightCard>
   );
 }
 
@@ -138,6 +153,7 @@ export function Certifications() {
       className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300 border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="certifications-heading"
     >
+      <SectionWatermark text="06 // CREDENTIALS" align="left" direction="right" />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Section Header */}
         <div className="max-w-2xl mb-10">
@@ -153,15 +169,12 @@ export function Certifications() {
             </span>
           </motion.div>
 
-          <motion.h2
+          <h2
             id="certifications-heading"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.1 }}
             className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-[1.15] mb-3"
           >
-            Certified skills & specialized training.
-          </motion.h2>
+            <MaskedHeading>Certified skills & specialized training.</MaskedHeading>
+          </h2>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}

@@ -30,7 +30,6 @@ export const config = {
   github: "https://github.com/sivaharish31",
   linkedin: "https://www.linkedin.com/in/ssivaharish",
   codolio: "https://codolio.com/profile/Sivaharish",
-  osci: "https://osci.osconnect.org/dashboard",
 
   // ── SEO / Meta ───────────────────────────────────────────
   siteUrl: "https://sivaharish-dev.vercel.app",
@@ -162,7 +161,8 @@ export interface Contribution {
   id: string;
   org: string;
   orgDisplayName: string;
-  orgLogoUrl: string;
+  orgLogoUrl?: string;
+  repoOwner: string;
   repo: string;
   prNumber: number;
   prTitle: string;
@@ -170,6 +170,8 @@ export interface Contribution {
   prUrl: string;
   status: "open" | "merged" | "closed" | "unknown";
   language: string;
+  createdAt: string;
+  updatedAt: string;
   tags: string[];
 }
 
@@ -179,14 +181,17 @@ export const contributions: Contribution[] = [
     org: "netflix",
     orgDisplayName: "Netflix",
     orgLogoUrl: "/logos/netflix.svg",
+    repoOwner: "Netflix",
     repo: "metaflow",
     prNumber: 3417,
-    prTitle: "Prevent Table.from_dataframe from mutating input DataFrame",
+    prTitle: "fix(cards): prevent Table.from_dataframe from mutating input DataFrame",
     prDescription:
       "Fixed an issue in Metaflow Cards where converting a pandas DataFrame into a table mutated the original input DataFrame.",
     prUrl: "https://github.com/Netflix/metaflow/pull/3417",
     status: "merged",
     language: "Python",
+    createdAt: "2026-10-24",
+    updatedAt: "2026-11-10",
     tags: ["metaflow-cards", "dataframe", "bug-fix"],
   },
   {
@@ -194,36 +199,25 @@ export const contributions: Contribution[] = [
     org: "microsoft",
     orgDisplayName: "Microsoft Azure",
     orgLogoUrl: "/logos/microsoft.svg",
+    repoOwner: "Azure",
     repo: "azure-sdk-for-java",
     prNumber: 51059,
-    prTitle: "Restore interrupt status in sync retry policy",
+    prTitle: "fix(azure-core): restore interrupt status in sync retry policy",
     prDescription:
       "Ensured thread interrupt status is properly preserved in synchronous HTTP retry policies when interrupted, adhering to standard Java concurrency guidelines.",
     prUrl: "https://github.com/Azure/azure-sdk-for-java/pull/51059",
     status: "merged",
     language: "Java",
+    createdAt: "2026-11-02",
+    updatedAt: "2026-11-02",
     tags: ["concurrency", "retry-policy", "azure-core"],
-  },
-  {
-    id: "error-prone",
-    org: "google",
-    orgDisplayName: "Google",
-    orgLogoUrl: "/logos/google.svg",
-    repo: "error-prone",
-    prNumber: 6351,
-    prTitle: "Handle nested single-statement blocks in DoNotCallSuggester",
-    prDescription:
-      "Handled nested single-statement blocks in DoNotCallSuggester so the matching logic correctly recognizes nested throw statements.",
-    prUrl: "https://github.com/google/error-prone/pull/6351",
-    status: "open",
-    language: "Java",
-    tags: ["static-analysis", "AST", "bug-fix"],
   },
   {
     id: "aws-sdk",
     org: "aws",
     orgDisplayName: "AWS",
     orgLogoUrl: "/logos/aws.svg",
+    repoOwner: "aws",
     repo: "aws-sdk-java-v2",
     prNumber: 7546,
     prTitle: "Fix SSO profile token provider resource cleanup",
@@ -232,6 +226,8 @@ export const contributions: Contribution[] = [
     prUrl: "https://github.com/aws/aws-sdk-java-v2/pull/7546",
     status: "open",
     language: "Java",
+    createdAt: "2026-11-12",
+    updatedAt: "2026-11-12",
     tags: ["resource-management", "SSO", "token-provider"],
   },
   {
@@ -239,6 +235,7 @@ export const contributions: Contribution[] = [
     org: "ibm",
     orgDisplayName: "IBM",
     orgLogoUrl: "/logos/ibm.svg",
+    repoOwner: "IBM",
     repo: "JSONata4Java",
     prNumber: 462,
     prTitle: "Fix substring handling for non-BMP Unicode characters",
@@ -247,17 +244,84 @@ export const contributions: Contribution[] = [
     prUrl: "https://github.com/IBM/JSONata4Java/pull/462",
     status: "open",
     language: "Java",
+    createdAt: "2026-11-12",
+    updatedAt: "2026-11-12",
     tags: ["unicode", "code-points", "string-processing"],
+  },
+  {
+    id: "microsoft-vscode",
+    org: "microsoft",
+    orgDisplayName: "Microsoft",
+    orgLogoUrl: "/logos/microsoft.svg",
+    repoOwner: "microsoft",
+    repo: "vscode",
+    prNumber: 340171,
+    prTitle: "fix(scm): restore auto-surround in commit input",
+    prDescription:
+      "Restored editor auto-surrounding behavior in the Source Control (SCM) commit message input box.",
+    prUrl: "https://github.com/microsoft/vscode/pull/340171",
+    status: "open",
+    language: "TypeScript",
+    createdAt: "2026-10-06",
+    updatedAt: "2026-10-07",
+    tags: ["vscode", "scm", "editor"],
+  },
+  {
+    id: "elastic-elasticsearch",
+    org: "elastic",
+    orgDisplayName: "Elastic",
+    repoOwner: "elastic",
+    repo: "elasticsearch",
+    prNumber: 164460,
+    prTitle: "Fix SOURCE rendering in ES|QL text formats",
+    prDescription:
+      "Fixed SOURCE command rendering output formatting across ES|QL text-based response formats.",
+    prUrl: "https://github.com/elastic/elasticsearch/pull/164460",
+    status: "open",
+    language: "Java",
+    createdAt: "2026-11-03",
+    updatedAt: "2026-11-04",
+    tags: ["esql", "formatting", "elasticsearch"],
+  },
+  {
+    id: "uber-nullaway",
+    org: "uber",
+    orgDisplayName: "Uber",
+    repoOwner: "uber",
+    repo: "NullAway",
+    prNumber: 2113,
+    prTitle: "Fix Checker Framework EnsuresNonNullIf support",
+    prDescription:
+      "Improved support for Checker Framework @EnsuresNonNullIf contracts during NullAway static nullability analysis.",
+    prUrl: "https://github.com/uber/NullAway/pull/2113",
+    status: "open",
+    language: "Java",
+    createdAt: "2026-11-02",
+    updatedAt: "2026-11-02",
+    tags: ["static-analysis", "nullability", "java"],
+  },
+  {
+    id: "error-prone",
+    org: "google",
+    orgDisplayName: "Google",
+    orgLogoUrl: "/logos/google.svg",
+    repoOwner: "google",
+    repo: "error-prone",
+    prNumber: 6351,
+    prTitle: "DoNotCallSuggester: handle nested single-statement blocks",
+    prDescription:
+      "Handled nested single-statement blocks in DoNotCallSuggester so the matching logic recognizes nested throw statements.",
+    prUrl: "https://github.com/google/error-prone/pull/6351",
+    status: "closed",
+    language: "Java",
+    createdAt: "2026-11-12",
+    updatedAt: "2026-11-12",
+    tags: ["static-analysis", "AST", "bug-fix"],
   },
 ];
 
-// ── Additional Community & Open Source Profiles ───────────────
+// ── Additional Developer Profiles ───────────────────────────
 export const communityLinks = [
-  {
-    name: "Open Source Connect India (OSCI)",
-    url: "https://osci.osconnect.org/dashboard",
-    description: "Open-source contributor profile and activities dashboard.",
-  },
   {
     name: "Codolio",
     url: "https://codolio.com/profile/Sivaharish",
@@ -459,14 +523,6 @@ export const unifiedDeveloperIdentity = [
     url: "https://codolio.com/profile/Sivaharish",
     description: "Aggregated coding journey, contest tracks, and verified developer profile.",
     highlight: "Active Profile",
-  },
-  {
-    category: "Community Open Source",
-    platform: "OSCI",
-    handle: "sivaharish",
-    url: "https://osci.osconnect.org/dashboard",
-    description: "Open Source Connect India community and contribution tracker.",
-    highlight: "Verified Contributor",
   },
   {
     category: "Professional Network",

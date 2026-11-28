@@ -5,6 +5,8 @@ import { GitHubIcon, LinkedInIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 import { useScrollSpy } from "../hooks/useScrollSpy";
 import { useScrolled } from "../hooks/useScrolled";
+import { useSmoothScroll } from "../hooks/useSmoothScroll";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 import { config } from "../data/portfolio";
 
 const NAV_ITEMS = [
@@ -24,11 +26,12 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [manualActive, setManualActive] = useState<string | null>(null);
   const activeSection = useScrollSpy(SECTION_IDS);
-  const scrolled = useScrolled(20);
+  const scrolled = useScrolled(24);
+  const prefersReduced = useReducedMotion();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Clear manual override when scroll spy matches target or user scrolls
-  const currentActive = manualActive && manualActive !== activeSection ? manualActive : activeSection;
+  const currentActive =
+    manualActive && manualActive !== activeSection ? manualActive : activeSection;
 
   // Reset manual active on direct scroll interaction
   useEffect(() => {
@@ -43,12 +46,31 @@ export function Navbar() {
     };
   }, []);
 
+  const { scrollTo: smoothScrollTo, getLenis } = useSmoothScroll();
+
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    const lenis = getLenis();
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      lenis?.stop();
+    } else {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      lenis?.start();
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      lenis?.start();
+    };
+  }, [menuOpen, getLenis]);
+
   const scrollTo = (id: string) => {
     setManualActive(id);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    smoothScrollTo(id, id === "hero" ? 0 : -84);
   };
 
   // Close mobile drawer on Escape key press
@@ -65,7 +87,11 @@ export function Navbar() {
   // Close mobile drawer on click outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (menuOpen && mobileMenuRef.current && !mobileMenuRef.current.contains(e.target as Node)) {
+      if (
+        menuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target as Node)
+      ) {
         const toggleBtn = document.getElementById("mobile-menu-toggle");
         if (toggleBtn && toggleBtn.contains(e.target as Node)) return;
         setMenuOpen(false);
@@ -76,172 +102,226 @@ export function Navbar() {
   }, [menuOpen]);
 
   return (
-    <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 pt-3 sm:pt-3.5 transition-all duration-300"
-    >
-      <div
-        className={`max-w-[1140px] mx-auto h-[54px] sm:h-[58px] px-3.5 sm:px-5 rounded-2xl flex items-center justify-between transition-all duration-300 ${
-          scrolled
-            ? "glass-panel shadow-sm border border-slate-200/90 dark:border-slate-800/90 dark:bg-slate-900/85 backdrop-blur-md"
-            : "bg-white/70 dark:bg-slate-950/70 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/60"
-        }`}
+    <>
+      <motion.header
+        initial={prefersReduced ? false : { y: -16, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 pt-3.5 sm:pt-4 pointer-events-none"
       >
-        {/* Monogram Brand Mark — clean and minimal SH branding */}
-        <motion.button
-          onClick={() => scrollTo("hero")}
-          className="flex items-center group cursor-pointer flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950 rounded-xl"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          aria-label="Sivaharish Home"
+        <div
+          className={`pointer-events-auto w-full lg:w-fit max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] mx-auto h-[50px] sm:h-[52px] px-2.5 sm:px-3 rounded-full flex items-center justify-between lg:justify-center lg:gap-3 xl:gap-4 transition-[background-color,border-color,box-shadow] duration-300 ${
+            scrolled
+              ? "bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border border-slate-200/80 dark:border-slate-700/70 shadow-[0_8px_30px_rgb(15,23,42,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+              : "bg-white/60 dark:bg-slate-950/55 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/60"
+          }`}
         >
-          <div className="relative w-8 h-8 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 dark:from-blue-600 dark:to-indigo-600 flex items-center justify-center shadow-xs border border-slate-700/20 dark:border-blue-400/20 overflow-hidden group-hover:shadow-blue-500/25 group-hover:shadow-md transition-all">
-            <span className="text-white text-xs font-extrabold tracking-tight">SH</span>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          </div>
-        </motion.button>
+          {/* Minimal SH Brand Mark */}
+          <motion.button
+            type="button"
+            onClick={() => scrollTo("hero")}
+            whileHover={prefersReduced ? undefined : { scale: 1.05 }}
+            whileTap={prefersReduced ? undefined : { scale: 0.95 }}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-bold text-[11.5px] tracking-tighter shadow-xs hover:shadow-md transition-shadow cursor-pointer flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
+            aria-label="SH — Return to Home"
+          >
+            SH
+          </motion.button>
 
-        {/* Desktop Nav Items */}
-        <nav
-          className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-slate-100/70 dark:bg-slate-900/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-800 backdrop-blur-sm"
-          role="navigation"
-          aria-label="Main navigation"
-        >
-          {NAV_ITEMS.map((item) => {
-            const isActive = currentActive === item.href;
-            return (
-              <button
-                key={item.href}
-                onClick={() => scrollTo(item.href)}
-                aria-current={isActive ? "page" : undefined}
-                className={`relative px-2.5 xl:px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-slate-900 ${
-                  isActive
-                    ? "text-slate-950 dark:text-white font-semibold"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60"
-                }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="nav-active-pill"
-                    className="absolute inset-0 bg-white dark:bg-slate-800 rounded-lg shadow-xs border border-slate-200/80 dark:border-slate-700/80"
-                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
-                  />
-                )}
-                <span className="relative z-10">{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
+          {/* Desktop Navigation Links */}
+          <nav
+            className="hidden lg:flex items-center gap-0.5"
+            role="navigation"
+            aria-label="Main navigation"
+          >
+            {NAV_ITEMS.map((item) => {
+              const isActive = currentActive === item.href;
+              return (
+                <button
+                  type="button"
+                  key={item.href}
+                  onClick={() => scrollTo(item.href)}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`relative px-2.5 xl:px-3 py-1.5 text-[12.5px] tracking-tight rounded-full transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 whitespace-nowrap ${
+                    isActive
+                      ? "text-slate-950 dark:text-white font-semibold"
+                      : "text-slate-600 dark:text-slate-400 font-medium hover:text-slate-950 dark:hover:text-white"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute inset-0 bg-slate-900/[0.06] dark:bg-white/[0.1] rounded-full"
+                      transition={
+                        prefersReduced
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 420, damping: 32 }
+                      }
+                    />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </button>
+              );
+            })}
+          </nav>
 
-        {/* Right Side Actions (Desktop) */}
-        <div className="hidden lg:flex items-center gap-2">
-          {/* Theme Toggle Button */}
-          <ThemeToggle />
+          {/* Right-Side Controls (Desktop) */}
+          <div className="hidden lg:flex items-center gap-1">
+            <ThemeToggle />
 
-          <div className="flex items-center gap-1 pl-1">
+            <div
+              className="h-3.5 w-px bg-slate-200/90 dark:bg-slate-800 mx-0.5"
+              aria-hidden="true"
+            />
+
             <a
               href={config.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.05] dark:hover:bg-white/[0.08] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               aria-label="GitHub Profile"
             >
-              <GitHubIcon className="w-4 h-4" />
+              <GitHubIcon className="w-[15px] h-[15px]" />
             </a>
             <a
               href={config.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.05] dark:hover:bg-white/[0.08] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               aria-label="LinkedIn Profile"
             >
-              <LinkedInIcon className="w-4 h-4" />
+              <LinkedInIcon className="w-[15px] h-[15px]" />
             </a>
+          </div>
+
+          {/* Mobile Controls (< lg) */}
+          <div className="flex items-center gap-1.5 lg:hidden">
+            <ThemeToggle />
+            <motion.button
+              type="button"
+              id="mobile-menu-toggle"
+              whileTap={prefersReduced ? undefined : { scale: 0.92 }}
+              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-900/[0.04] hover:bg-slate-900/[0.08] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              onClick={() => setMenuOpen((v) => !v)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-navigation"
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={menuOpen ? "close" : "open"}
+                  initial={prefersReduced ? false : { opacity: 0, rotate: -45, scale: 0.8 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  exit={prefersReduced ? undefined : { opacity: 0, rotate: 45, scale: 0.8 }}
+                  transition={{ duration: prefersReduced ? 0 : 0.15 }}
+                  className="flex items-center justify-center"
+                >
+                  {menuOpen ? (
+                    <X className="w-4 h-4" />
+                  ) : (
+                    <Menu className="w-4 h-4" />
+                  )}
+                </motion.span>
+              </AnimatePresence>
+            </motion.button>
           </div>
         </div>
 
-        {/* Mobile controls (Theme Toggle + Hamburger) */}
-        <div className="flex items-center gap-1.5 lg:hidden">
-          <ThemeToggle />
-          <button
-            id="mobile-menu-toggle"
-            className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-navigation"
-          >
-            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
+        {/* Mobile Floating Glass Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              ref={mobileMenuRef}
+              id="mobile-navigation"
+              role="region"
+              aria-label="Mobile Navigation"
+              initial={prefersReduced ? false : { opacity: 0, y: -10, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={prefersReduced ? undefined : { opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: prefersReduced ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-auto lg:hidden mt-2.5 p-3 rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-slate-200/80 dark:border-slate-700/70 max-w-[1120px] mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl"
+            >
+              <nav aria-label="Mobile sections" className="space-y-1">
+                {NAV_ITEMS.map((item, i) => {
+                  const isActive = currentActive === item.href;
+                  return (
+                    <motion.button
+                      type="button"
+                      key={item.href}
+                      initial={prefersReduced ? false : { opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        delay: prefersReduced ? 0 : i * 0.025,
+                        duration: prefersReduced ? 0 : 0.2,
+                      }}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        requestAnimationFrame(() => {
+                          scrollTo(item.href);
+                        });
+                      }}
+                      aria-current={isActive ? "page" : undefined}
+                      className={`flex items-center justify-between w-full text-left px-4 py-2.5 text-[13px] tracking-tight rounded-2xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
+                        isActive
+                          ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold"
+                          : "text-slate-700 dark:text-slate-300 font-medium hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.04] dark:hover:bg-white/[0.06]"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {isActive && (
+                        <span
+                          className="w-1.5 h-1.5 rounded-full bg-blue-400 dark:bg-blue-600"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </motion.button>
+                  );
+                })}
+              </nav>
 
-      {/* Mobile Drawer Menu */}
+              <div className="pt-3 mt-3 border-t border-slate-200/80 dark:border-slate-800 flex items-center justify-between px-2">
+                <div className="flex items-center gap-3">
+                  <a
+                    href={config.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg"
+                  >
+                    <GitHubIcon className="w-3.5 h-3.5" />
+                    GitHub
+                  </a>
+                  <a
+                    href={config.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg"
+                  >
+                    <LinkedInIcon className="w-3.5 h-3.5" />
+                    LinkedIn
+                  </a>
+                </div>
+
+                <ThemeToggle showLabel />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.header>
+
+      {/* Mobile Backdrop Scrim */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            ref={mobileMenuRef}
-            id="mobile-navigation"
-            role="region"
-            aria-label="Mobile Navigation"
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="lg:hidden mt-2 p-3.5 rounded-2xl glass-panel shadow-lg border border-slate-200/90 dark:border-slate-800 max-w-[1140px] mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-md"
-          >
-            <div className="space-y-1">
-              {NAV_ITEMS.map((item, i) => (
-                <motion.button
-                  key={item.href}
-                  initial={{ opacity: 0, x: -8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.025 }}
-                  onClick={() => {
-                    scrollTo(item.href);
-                    setMenuOpen(false);
-                  }}
-                  aria-current={currentActive === item.href ? "page" : undefined}
-                  className={`block w-full text-left px-3 py-2 text-xs font-medium rounded-xl transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
-                    currentActive === item.href
-                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-xs font-semibold"
-                      : "text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80"
-                  }`}
-                >
-                  {item.label}
-                </motion.button>
-              ))}
-            </div>
-
-            <div className="pt-2.5 mt-2.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between px-1">
-              <div className="flex items-center gap-3">
-                <a
-                  href={config.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md"
-                >
-                  <GitHubIcon className="w-3.5 h-3.5" />
-                  GitHub
-                </a>
-                <a
-                  href={config.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md"
-                >
-                  <LinkedInIcon className="w-3.5 h-3.5" />
-                  LinkedIn
-                </a>
-              </div>
-
-              <ThemeToggle showLabel />
-            </div>
-          </motion.div>
+            initial={prefersReduced ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={prefersReduced ? undefined : { opacity: 0 }}
+            transition={{ duration: prefersReduced ? 0 : 0.2 }}
+            onClick={() => setMenuOpen(false)}
+            className="fixed inset-0 z-40 bg-slate-950/20 dark:bg-black/45 backdrop-blur-[2px] lg:hidden"
+            aria-hidden="true"
+          />
         )}
       </AnimatePresence>
-    </motion.header>
+    </>
   );
 }

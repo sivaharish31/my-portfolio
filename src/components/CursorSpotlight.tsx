@@ -9,15 +9,16 @@ export function CursorSpotlight() {
   );
   const [isVisible, setIsVisible] = useState(false);
 
-  const mouseX = useSpring(0, { stiffness: 50, damping: 20 });
-  const mouseY = useSpring(0, { stiffness: 50, damping: 20 });
+  // Ambient spotlight follows with smooth inertia
+  const spotX = useSpring(0, { stiffness: 75, damping: 24 });
+  const spotY = useSpring(0, { stiffness: 75, damping: 24 });
 
   useEffect(() => {
-    if (isTouchDevice) return;
+    if (isTouchDevice || prefersReduced) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
+      spotX.set(e.clientX);
+      spotY.set(e.clientY);
       if (!isVisible) setIsVisible(true);
     };
 
@@ -32,7 +33,7 @@ export function CursorSpotlight() {
       window.removeEventListener("mousemove", handleMouseMove);
       document.body.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [mouseX, mouseY, isVisible, isTouchDevice]);
+  }, [spotX, spotY, isVisible, isTouchDevice, prefersReduced]);
 
   if (prefersReduced || isTouchDevice || !isVisible) {
     return null;
@@ -40,12 +41,12 @@ export function CursorSpotlight() {
 
   return (
     <motion.div
-      className="pointer-events-none fixed top-0 left-0 z-30 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-60 dark:opacity-25 mix-blend-multiply dark:mix-blend-screen blur-3xl"
+      className="pointer-events-none fixed top-0 left-0 z-30 w-[680px] h-[680px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-75 dark:opacity-50 mix-blend-multiply dark:mix-blend-screen blur-3xl"
       style={{
-        x: mouseX,
-        y: mouseY,
+        x: spotX,
+        y: spotY,
         background:
-          "radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.04) 40%, transparent 70%)",
+          "radial-gradient(circle, rgba(37, 99, 235, 0.14) 0%, rgba(124, 58, 237, 0.08) 38%, rgba(6, 182, 212, 0.04) 60%, transparent 75%)",
       }}
       aria-hidden="true"
     />

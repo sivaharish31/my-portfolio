@@ -4,6 +4,7 @@ import {
   Server, Cpu, Code2, Database, GitBranch, ShieldCheck, Sparkles,
 } from "lucide-react";
 import { interests } from "../data/portfolio";
+import { MaskedHeading, SpotlightCard, SectionWatermark } from "./MotionPrimitives";
 
 const iconMap: Record<string, React.ReactNode> = {
   cpu: <Cpu className="w-5 h-5 text-blue-600" />,
@@ -25,6 +26,7 @@ export function Interests() {
       className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="interests-heading"
     >
+      <SectionWatermark text="09 // INTERESTS" align="right" direction="left" />
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 relative z-10 min-w-0">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
@@ -41,18 +43,15 @@ export function Interests() {
               </span>
             </motion.div>
 
-            <motion.h2
+            <h2
               id="interests-heading"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.1 }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.15]"
             >
-              Always learning.{" "}
+              <MaskedHeading>Always learning.</MaskedHeading>{" "}
               <span className="text-slate-500 dark:text-slate-400 font-normal">
-                Always building.
+                <MaskedHeading delay={0.18}>Always building.</MaskedHeading>
               </span>
-            </motion.h2>
+            </h2>
           </div>
 
           <motion.p
@@ -68,24 +67,30 @@ export function Interests() {
         {/* Bento Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 min-w-0">
           {interests.map((interest, i) => (
-            <motion.div
+            <SpotlightCard
               key={interest.title}
-              initial={{ opacity: 0, y: 24 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: i * 0.08 + 0.25, ease: "easeOut" }}
-              className="p-5 sm:p-6 rounded-2xl bg-slate-50/70 border border-slate-200/80 hover:border-slate-300 hover:bg-white hover:shadow-md dark:bg-slate-800/40 dark:border-slate-800 dark:hover:bg-slate-800/80 dark:hover:border-slate-700 transition-all group cursor-default min-w-0"
-              whileHover={{ y: -3 }}
+              spotlightColor="rgba(59, 130, 246, 0.12)"
+              tiltStrength={3.5}
+              className="rounded-2xl h-full"
             >
-              <div className="p-3 bg-white dark:bg-slate-900 rounded-xl shadow-2xs border border-slate-200/60 dark:border-slate-700 w-fit mb-4 group-hover:scale-105 transition-transform">
-                {iconMap[interest.icon] ?? <Server className="w-5 h-5 text-blue-600" />}
-              </div>
-              <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                {interest.title}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                {interest.description}
-              </p>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: i * 0.08 + 0.25, ease: "easeOut" }}
+                className="p-5 sm:p-6 rounded-2xl bg-slate-50/75 border border-slate-200/80 hover:border-blue-300/70 hover:bg-white hover:shadow-lg dark:bg-slate-800/50 dark:border-slate-800 dark:hover:bg-slate-800/85 dark:hover:border-blue-700/60 transition-all group cursor-default min-w-0 h-full"
+                whileHover={{ y: -4 }}
+              >
+                <div className="p-3 bg-white dark:bg-slate-900 rounded-xl shadow-2xs border border-slate-200/60 dark:border-slate-700 w-fit mb-4 group-hover:scale-105 transition-transform">
+                  {iconMap[interest.icon] ?? <Server className="w-5 h-5 text-blue-600" />}
+                </div>
+                <h3 className="font-bold text-base text-slate-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {interest.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {interest.description}
+                </p>
+              </motion.div>
+            </SpotlightCard>
           ))}
         </div>
       </div>
