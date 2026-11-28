@@ -23,7 +23,7 @@ export function Interests() {
     <section
       id="interests"
       ref={ref}
-      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
+      className="pt-16 pb-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="interests-heading"
     >
       <SectionWatermark text="09 // INTERESTS" align="right" direction="left" />

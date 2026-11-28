@@ -119,7 +119,7 @@ export function GitHubActivity() {
     <section
       id="github"
       ref={ref}
-      className="py-14 sm:py-16 md:py-20 bg-slate-50/60 dark:bg-slate-950/60 border-t border-slate-200/60 dark:border-slate-800/80 relative overflow-hidden"
+      className="pt-16 pb-14 sm:py-16 md:py-20 bg-slate-50/60 dark:bg-slate-950/60 border-t border-slate-200/60 dark:border-slate-800/80 relative overflow-hidden"
       aria-labelledby="github-heading"
     >
       <SectionWatermark text="07 // GITHUB" align="right" direction="left" />

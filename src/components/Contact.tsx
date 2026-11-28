@@ -21,7 +21,7 @@ export function Contact() {
     <section
       id="contact"
       ref={ref}
-      className="py-14 sm:py-16 md:py-20 bg-slate-900 dark:bg-slate-950 text-white relative overflow-hidden transition-colors duration-300 border-t border-slate-800"
+      className="pt-16 pb-14 sm:py-16 md:py-20 bg-slate-900 dark:bg-slate-950 text-white relative overflow-hidden transition-colors duration-300 border-t border-slate-800"
       aria-labelledby="contact-heading"
     >
       {/* Background ambient lighting */}

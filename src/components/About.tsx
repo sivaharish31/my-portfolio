@@ -59,7 +59,7 @@ export function About() {
     >
       {/* Editorial Parallax Watermark */}
       <div
-        className="about-watermark block absolute top-6 sm:top-8 lg:top-10 right-0 text-[3.25rem] sm:text-[5.5rem] lg:text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
+        className="about-watermark block absolute top-3 sm:top-5 lg:top-10 right-4 sm:right-6 lg:right-0 text-[1.95rem] sm:text-[4rem] lg:text-[8rem] leading-none font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
         aria-hidden="true"
       >
         01 // ENGINEERING

@@ -31,7 +31,7 @@ export function UnifiedDeveloperIdentity() {
     <section
       id="ecosystem"
       ref={ref}
-      className="py-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
+      className="pt-16 pb-14 sm:py-16 md:py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300"
       aria-labelledby="identity-heading"
     >
       <SectionWatermark text="08 // ECOSYSTEM" align="left" direction="right" />

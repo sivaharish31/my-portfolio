@@ -250,11 +250,11 @@ export function SectionWatermark({
   return (
     <div
       ref={ref}
-      className={`block absolute top-6 sm:top-8 lg:top-10 ${
-        align === "right" ? "right-0" : "left-0"
-      } text-[3.25rem] sm:text-[5rem] lg:text-[7.5rem] font-black tracking-tighter ${
+      className={`block absolute top-3 sm:top-5 lg:top-10 ${
+        align === "right" ? "right-4 sm:right-6 lg:right-0" : "left-4 sm:left-6 lg:left-0"
+      } text-[1.95rem] sm:text-[4rem] lg:text-[7.5rem] leading-none font-black tracking-tighter ${
         tone === "dark"
-          ? "text-white/[0.04]"
+          ? "text-white/[0.045]"
           : "text-slate-900/[0.065] dark:text-white/[0.035]"
       } select-none pointer-events-none whitespace-nowrap z-0`}
       aria-hidden="true"

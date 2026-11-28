@@ -335,7 +335,7 @@ export function OpenSource() {
     >
       {/* Editorial Parallax Watermark */}
       <div
-        className="oss-watermark block absolute top-6 sm:top-8 lg:top-10 left-0 text-[3.25rem] sm:text-[5.5rem] lg:text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
+        className="oss-watermark block absolute top-3 sm:top-5 lg:top-10 left-4 sm:left-6 lg:left-0 text-[1.95rem] sm:text-[4rem] lg:text-[8rem] leading-none font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
         aria-hidden="true"
       >
         04 // OPEN SOURCE

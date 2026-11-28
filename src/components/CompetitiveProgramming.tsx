@@ -390,7 +390,7 @@ export function CompetitiveProgramming() {
   return (
     <section
       id="competitive"
-      className="py-14 sm:py-16 md:py-20 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
+      className="pt-16 pb-14 sm:py-16 md:py-20 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="cp-heading"
     >
       <SectionWatermark text="05 // PROBLEM SOLVING" align="right" direction="left" />

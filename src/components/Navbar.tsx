@@ -200,29 +200,24 @@ export function Navbar() {
             <motion.button
               type="button"
               id="mobile-menu-toggle"
-              whileTap={prefersReduced ? undefined : { scale: 0.92 }}
-              className="inline-flex items-center justify-center w-8 h-8 rounded-full text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white bg-slate-900/[0.04] hover:bg-slate-900/[0.08] dark:bg-white/[0.06] dark:hover:bg-white/[0.12] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              whileTap={prefersReduced ? undefined : { scale: 0.94 }}
+              className="inline-flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-slate-800 dark:text-slate-100 hover:text-slate-950 dark:hover:text-white bg-slate-900/[0.06] hover:bg-slate-900/[0.1] dark:bg-white/[0.08] dark:hover:bg-white/[0.14] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 text-xs font-semibold"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
               aria-controls="mobile-navigation"
             >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={menuOpen ? "close" : "open"}
-                  initial={prefersReduced ? false : { opacity: 0, rotate: -45, scale: 0.8 }}
-                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                  exit={prefersReduced ? undefined : { opacity: 0, rotate: 45, scale: 0.8 }}
-                  transition={{ duration: prefersReduced ? 0 : 0.15 }}
-                  className="flex items-center justify-center"
-                >
-                  {menuOpen ? (
-                    <X className="w-4 h-4" />
-                  ) : (
-                    <Menu className="w-4 h-4" />
-                  )}
-                </motion.span>
-              </AnimatePresence>
+              {menuOpen ? (
+                <>
+                  <X className="w-3.5 h-3.5" />
+                  <span>Close</span>
+                </>
+              ) : (
+                <>
+                  <Menu className="w-3.5 h-3.5" />
+                  <span>Menu</span>
+                </>
+              )}
             </motion.button>
           </div>
         </div>
@@ -235,25 +230,19 @@ export function Navbar() {
               id="mobile-navigation"
               role="region"
               aria-label="Mobile Navigation"
-              initial={prefersReduced ? false : { opacity: 0, y: -10, scale: 0.98 }}
+              initial={prefersReduced ? false : { opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={prefersReduced ? undefined : { opacity: 0, y: -8, scale: 0.98 }}
-              transition={{ duration: prefersReduced ? 0 : 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="pointer-events-auto lg:hidden mt-2.5 p-3 rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.14)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-slate-200/80 dark:border-slate-700/70 max-w-[1120px] mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl"
+              exit={prefersReduced ? undefined : { opacity: 0, y: -6, scale: 0.98 }}
+              transition={{ duration: prefersReduced ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="pointer-events-auto lg:hidden mt-2.5 p-3 rounded-3xl shadow-[0_20px_50px_rgba(15,23,42,0.16)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] border border-slate-200/90 dark:border-slate-700/80 max-w-[440px] mx-auto bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl max-h-[calc(100dvh-5.5rem)] overflow-y-auto"
             >
               <nav aria-label="Mobile sections" className="space-y-1">
-                {NAV_ITEMS.map((item, i) => {
+                {NAV_ITEMS.map((item) => {
                   const isActive = currentActive === item.href;
                   return (
-                    <motion.button
+                    <button
                       type="button"
                       key={item.href}
-                      initial={prefersReduced ? false : { opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{
-                        delay: prefersReduced ? 0 : i * 0.025,
-                        duration: prefersReduced ? 0 : 0.2,
-                      }}
                       onClick={() => {
                         setMenuOpen(false);
                         requestAnimationFrame(() => {
@@ -264,7 +253,7 @@ export function Navbar() {
                       className={`flex items-center justify-between w-full text-left px-4 py-2.5 text-[13px] tracking-tight rounded-2xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                         isActive
                           ? "bg-slate-900 text-white dark:bg-white dark:text-slate-950 font-semibold"
-                          : "text-slate-700 dark:text-slate-300 font-medium hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.04] dark:hover:bg-white/[0.06]"
+                          : "text-slate-700 dark:text-slate-200 font-medium hover:text-slate-950 dark:hover:text-white hover:bg-slate-900/[0.04] dark:hover:bg-white/[0.06]"
                       }`}
                     >
                       <span>{item.label}</span>
@@ -274,7 +263,7 @@ export function Navbar() {
                           aria-hidden="true"
                         />
                       )}
-                    </motion.button>
+                    </button>
                   );
                 })}
               </nav>
