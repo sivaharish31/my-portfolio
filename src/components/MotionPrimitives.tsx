@@ -226,6 +226,22 @@ export function SectionWatermark({
           }
         );
       });
+      mm.add("(max-width: 1023px)", () => {
+        gsap.fromTo(
+          el,
+          { x: direction === "left" ? 28 : -28 },
+          {
+            x: direction === "left" ? -28 : 28,
+            ease: "none",
+            scrollTrigger: {
+              trigger: parent,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        );
+      });
     }, ref);
 
     return () => ctx.revert();
@@ -234,11 +250,11 @@ export function SectionWatermark({
   return (
     <div
       ref={ref}
-      className={`hidden lg:block absolute top-10 ${
+      className={`block absolute top-6 sm:top-8 lg:top-10 ${
         align === "right" ? "right-0" : "left-0"
-      } text-[7.5rem] font-black tracking-tighter ${
+      } text-[3.25rem] sm:text-[5rem] lg:text-[7.5rem] font-black tracking-tighter ${
         tone === "dark"
-          ? "text-white/[0.035]"
+          ? "text-white/[0.04]"
           : "text-slate-900/[0.065] dark:text-white/[0.035]"
       } select-none pointer-events-none whitespace-nowrap z-0`}
       aria-hidden="true"

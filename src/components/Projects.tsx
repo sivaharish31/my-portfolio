@@ -226,23 +226,20 @@ export function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useScrollReveal(sectionRef, () => {
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
-      gsap.fromTo(
-        ".projects-watermark",
-        { x: 60 },
-        {
-          x: -60,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-    });
+    gsap.fromTo(
+      ".projects-watermark",
+      { x: 40 },
+      {
+        x: -40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      }
+    );
   });
 
   return (
@@ -252,9 +249,9 @@ export function Projects() {
       className="py-16 sm:py-20 md:py-24 bg-slate-50/70 dark:bg-slate-950/60 relative overflow-hidden border-t border-slate-200/60 dark:border-slate-800/80"
       aria-labelledby="projects-heading"
     >
-      {/* Editorial Parallax Watermark (Desktop) */}
+      {/* Editorial Parallax Watermark */}
       <div
-        className="projects-watermark hidden lg:block absolute top-10 right-0 text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
+        className="projects-watermark block absolute top-6 sm:top-8 lg:top-10 right-0 text-[3.25rem] sm:text-[5.5rem] lg:text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
         aria-hidden="true"
       >
         03 // PROJECTS

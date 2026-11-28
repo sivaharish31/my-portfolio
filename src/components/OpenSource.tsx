@@ -284,23 +284,20 @@ export function OpenSource() {
       }
     );
 
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
-      gsap.fromTo(
-        ".oss-watermark",
-        { x: -50 },
-        {
-          x: 50,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-    });
+    gsap.fromTo(
+      ".oss-watermark",
+      { x: -40 },
+      {
+        x: 40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      }
+    );
   });
 
   // Merge verified static metadata with live GitHub API statuses & dates
@@ -336,9 +333,9 @@ export function OpenSource() {
       className="py-16 sm:py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="oss-heading"
     >
-      {/* Editorial Parallax Watermark (Desktop) */}
+      {/* Editorial Parallax Watermark */}
       <div
-        className="oss-watermark hidden lg:block absolute top-10 left-0 text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
+        className="oss-watermark block absolute top-6 sm:top-8 lg:top-10 left-0 text-[3.25rem] sm:text-[5.5rem] lg:text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.03] select-none pointer-events-none whitespace-nowrap"
         aria-hidden="true"
       >
         04 // OPEN SOURCE

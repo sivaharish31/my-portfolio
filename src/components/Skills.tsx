@@ -54,23 +54,20 @@ export function Skills() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useScrollReveal(sectionRef, () => {
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1024px)", () => {
-      gsap.fromTo(
-        ".skills-watermark",
-        { x: -50 },
-        {
-          x: 50,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-    });
+    gsap.fromTo(
+      ".skills-watermark",
+      { x: -40 },
+      {
+        x: 40,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      }
+    );
   });
 
   const categories = ["All", ...skillCategories.map((c) => c.title)];
@@ -87,9 +84,9 @@ export function Skills() {
       className="py-16 sm:py-20 md:py-24 bg-white dark:bg-slate-900 relative overflow-hidden"
       aria-labelledby="skills-heading"
     >
-      {/* Editorial Parallax Watermark (Desktop) */}
+      {/* Editorial Parallax Watermark */}
       <div
-        className="skills-watermark hidden lg:block absolute top-10 left-0 text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.025] select-none pointer-events-none whitespace-nowrap"
+        className="skills-watermark block absolute top-6 sm:top-8 lg:top-10 left-0 text-[3.25rem] sm:text-[5.5rem] lg:text-[8rem] font-black tracking-tighter text-slate-900/[0.065] dark:text-white/[0.025] select-none pointer-events-none whitespace-nowrap"
         aria-hidden="true"
       >
         02 // TECH STACK
