@@ -32,6 +32,8 @@ export function Navbar() {
 
   const currentActive =
     manualActive && manualActive !== activeSection ? manualActive : activeSection;
+  const currentActiveLabel =
+    NAV_ITEMS.find((item) => item.href === currentActive)?.label ?? "Home";
 
   // Reset manual active on direct scroll interaction
   useEffect(() => {
@@ -110,7 +112,7 @@ export function Navbar() {
         className="fixed top-0 left-0 right-0 z-50 px-3 sm:px-6 pt-3.5 sm:pt-4 pointer-events-none"
       >
         <div
-          className={`pointer-events-auto w-full lg:w-fit max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] mx-auto h-[50px] sm:h-[52px] px-2.5 sm:px-3 rounded-full flex items-center justify-between lg:justify-center lg:gap-3 xl:gap-4 transition-[background-color,border-color,box-shadow] duration-300 ${
+          className={`pointer-events-auto w-fit max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] mx-auto h-[50px] sm:h-[52px] px-2 sm:px-3 rounded-full flex items-center justify-center gap-2 sm:gap-3 xl:gap-4 transition-[background-color,border-color,box-shadow] duration-300 ${
             scrolled
               ? "bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border border-slate-200/80 dark:border-slate-700/70 shadow-[0_8px_30px_rgb(15,23,42,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
               : "bg-white/60 dark:bg-slate-950/55 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/60"
@@ -196,6 +198,14 @@ export function Navbar() {
 
           {/* Mobile Controls (< lg) */}
           <div className="flex items-center gap-1.5 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setMenuOpen((v) => !v)}
+              className="px-2.5 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-100 bg-slate-900/[0.05] dark:bg-white/[0.08] truncate max-w-[120px] cursor-pointer"
+              aria-label={`Current section: ${currentActiveLabel}. Open navigation menu`}
+            >
+              {currentActiveLabel}
+            </button>
             <ThemeToggle />
             <motion.button
               type="button"
